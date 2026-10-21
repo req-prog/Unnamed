@@ -16,6 +16,17 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 #fly{position:fixed;left:calc(160px + env(safe-area-inset-left,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
 #hands{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;gap:14px}
 .hb{width:84px;height:84px;border-radius:50%;font-size:26px;touch-action:none}
+#c0,#c1{position:fixed;left:0;top:0;width:72px;height:72px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:22px;background:color-mix(in srgb,var(--ac) 28%,transparent);box-shadow:inset 0 0 0 3px var(--ac);color:var(--tx);touch-action:none;will-change:transform}
+.hb.cm{box-shadow:0 0 0 3px var(--ac)}
+#ed{position:fixed;right:calc(8px + env(safe-area-inset-right,0px));top:calc(64px + env(safe-area-inset-top,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(48vw,290px);display:none;background:var(--ui);border-radius:18px;padding:10px;overflow:auto;touch-action:pan-y;box-sizing:border-box;box-shadow:0 3px 0 var(--ln)}
+#ed .eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+#ed .el{font-size:13px;opacity:.7;margin:10px 0 6px}
+.eg{display:flex;flex-wrap:wrap;gap:6px}
+.ch{border:0;border-radius:10px;padding:8px 9px;font:inherit;font-size:13px;background:transparent;color:var(--tx);box-shadow:inset 0 0 0 2px var(--ln)}
+.ch.on{background:var(--ac);color:#fff;box-shadow:none}
+.sw{width:38px;height:38px;border-radius:50%;border:0;box-shadow:inset 0 0 0 2px var(--ln)}
+.sw.on{box-shadow:0 0 0 3px var(--ac)}
+body.edit #hands,body.edit #fly,body.edit #joy,body.edit #arm,body.edit .circ{display:none!important}
 #arm{position:fixed;left:30%;width:40%;bottom:calc(8px + env(safe-area-inset-bottom,0px))}
 #toast{position:fixed;left:50%;top:40%;transform:translateX(-50%);background:var(--ui);padding:8px 14px;border-radius:12px;opacity:0;transition:opacity .25s;pointer-events:none;text-align:center;max-width:80%}
 #menu{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--bg) 80%,transparent);padding:12px;overflow:auto}
@@ -24,6 +35,7 @@ h1{font:600 38px/1 'Unbounded',system-ui,sans-serif;margin:0 0 6px;letter-spacin
 p{margin:6px 0;line-height:1.4;font-size:14px}
 .panel .b{width:100%;margin-top:8px;font-size:16px}
 textarea{width:100%;box-sizing:border-box;height:64px;margin-top:6px;border-radius:10px;border:2px solid var(--ln);background:transparent;color:var(--tx);font:12px monospace;user-select:text;-webkit-user-select:text}
+input.ip{width:100%;box-sizing:border-box;height:40px;margin-top:6px;border-radius:10px;border:2px solid var(--ln);background:transparent;color:var(--tx);font:13px monospace;padding:0 10px;user-select:text;-webkit-user-select:text}
 #mp{display:none}
 </style>
 </head>
@@ -33,17 +45,21 @@ textarea{width:100%;box-sizing:border-box;height:64px;margin-top:6px;border-radi
 <button class="b" id="fs" title="Полный экран">⛶</button><button class="b" id="mn" title="Меню">☰</button>
 <button class="b" id="pen" title="Рисовать">✏️</button><button class="b" id="col" title="Цвет">●</button>
 <button class="b" id="frz" title="Заморозить">❄</button><button class="b" id="big" title="Больше">⤢</button><button class="b" id="sml" title="Меньше">⤡</button>
-<button class="b" id="wld" title="Склеить">🔗</button><button class="b" id="spw" title="Создать предмет">🧱</button>
+<button class="b" id="wld" title="Склеить">🔗</button><button class="b" id="spw" title="Создать предмет">🧱</button><button class="b" id="sk" title="Скин">🎨</button>
 </div>
 <div id="joy"><div id="knob"></div></div>
 <div id="fly"><button class="b" id="up">▲</button><button class="b" id="dn">▼</button></div>
 <input type="range" id="arm" min="0.5" max="2.4" step="0.05" value="1.1">
 <div id="hands"><button class="b hb" data-i="0">Л</button><button class="b hb" data-i="1">П</button></div>
+<div id="c0" class="circ" data-i="0">Л</div><div id="c1" class="circ" data-i="1">П</div>
+<div id="ed"><div class="eh"><b>Скин</b><button class="b" id="edx">✕</button></div><div class="el">Цвет</div><div class="eg" id="gc"></div><div class="el">Глаза</div><div class="eg" id="ge"></div><div class="el">Аксессуар</div><div class="eg" id="ga"></div></div>
 <div id="toast"></div>
 <div id="menu"><div class="panel">
 <h1>VIAER</h1>
 <p>Песочница: летающая голова и две руки. Берите предметы, рисуйте на них, замораживайте в воздухе, склеивайте, растягивайте и хватайте других игроков.</p>
 <button class="b" id="solo">Играть одному</button>
+<input class="ip" id="ts" inputmode="decimal" autocomplete="off" placeholder="Мой Tailscale IP, например 100.101.102.103">
+<p style="font-size:12px;opacity:.75">Играете через Tailscale? Оба впишите свой IP из приложения Tailscale и только потом создавайте коды.</p>
 <button class="b" id="host">Создать комнату</button>
 <button class="b" id="join">Войти в комнату</button>
 <div id="mp">
@@ -54,7 +70,7 @@ textarea{width:100%;box-sizing:border-box;height:64px;margin-top:6px;border-radi
 <button class="b" id="go"></button>
 <p id="mps"></p>
 </div>
-<p><b>Управление.</b> Левый джойстик — лететь, ▲▼ — вверх и вниз. Тяните по экрану — смотреть. Зажмите кнопку руки и ведите пальцем — рука двигается, короткий тап — схватить или отпустить. Ползунок внизу — длина рук. С включённым ✏️ зажатая рука рисует.</p>
+<p><b>Управление.</b> Левый джойстик — лететь, ▲▼ — вверх и вниз. Тяните по экрану — смотреть. Нажмите Л или П — рядом с рукой появится кружок (его видите только вы). Ведите кружок пальцем — рука двигается за ним, короткий тап по кружку — схватить или отпустить. Ещё раз Л/П — убрать кружок. Ползунок внизу — длина руки. Включённый ✏️ и зажатый кружок — рука рисует. 🎨 — редактор скина: цвет, глаза и аксессуары.</p>
 </div></div>
 <script>
 function showErr(t){const d=document.createElement('div');d.style.cssText='position:fixed;left:8px;right:8px;top:8px;z-index:99;background:#b00020;color:#fff;padding:10px;border-radius:8px;font:13px monospace;user-select:text';d.textContent=t;document.body.appendChild(d)}
@@ -79,7 +95,7 @@ const FG='vec3(.749,.902,.949)';
 function sh(t,s){const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(x));return x}
 function prog(v,f,a2){const p=gl.createProgram();gl.attachShader(p,sh(gl.VERTEX_SHADER,CM+v));gl.attachShader(p,sh(gl.FRAGMENT_SHADER,'precision mediump float;'+f));gl.bindAttribLocation(p,0,'aP');gl.bindAttribLocation(p,1,a2);gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));
 const u={};['uCam','uCS','uProj','uT','uS','uMR','uC','uE','uH'].forEach(n=>u[n]=gl.getUniformLocation(p,n));return{p,u}}
-const PM=prog('attribute vec3 aP,aN;uniform vec3 uT;uniform float uS;uniform vec4 uMR;varying vec3 vN;varying float vD;vec3 rot(vec3 p){p=vec3(p.x,uMR.z*p.y-uMR.w*p.z,uMR.w*p.y+uMR.z*p.z);return vec3(uMR.x*p.x+uMR.y*p.z,p.y,-uMR.y*p.x+uMR.x*p.z);}void main(){vec3 q;gl_Position=view(rot(aP*uS)+uT,q);vN=rot(aN);vD=length(q);}',
+const PM=prog('attribute vec3 aP,aN;uniform vec3 uT;uniform vec3 uS;uniform vec4 uMR;varying vec3 vN;varying float vD;vec3 rot(vec3 p){p=vec3(p.x,uMR.z*p.y-uMR.w*p.z,uMR.w*p.y+uMR.z*p.z);return vec3(uMR.x*p.x+uMR.y*p.z,p.y,-uMR.y*p.x+uMR.x*p.z);}void main(){vec3 q;gl_Position=view(rot(aP*uS)+uT,q);vN=rot(aN);vD=length(q);}',
 'varying vec3 vN;varying float vD;uniform vec3 uC,uE;void main(){vec3 n=normalize(vN);float l=.62+.45*max(dot(n,normalize(vec3(.4,.8,.3))),0.);vec3 c=uC*l+uE;gl_FragColor=vec4(mix(c,'+FG+',smoothstep(30.,120.,vD)),1.);}','aN');
 const PP=prog('attribute vec3 aP,aC;uniform float uH;varying vec3 vC;varying float vD;void main(){vec3 q;gl_Position=view(aP,q);vC=aC;vD=length(q);gl_PointSize=clamp(.09*uH*.5*uProj.y/max(-q.z,.1),2.,60.);}',
 'varying vec3 vC;varying float vD;void main(){if(length(gl_PointCoord-.5)>.5)discard;gl_FragColor=vec4(mix(vC,'+FG+',smoothstep(30.,120.,vD)),1.);}','aC');
@@ -95,12 +111,12 @@ for(let j=0;j<S;j++){const f0=j/S*6.2832,f1=(j+1)/S*6.2832,ny=(rb-rt)/h,N=f=>{co
 T(a,P(rt,.5,f0),P(rb,-.5,f0),P(rb,-.5,f1),N(f0),N(f0),N(f1));T(a,P(rt,.5,f0),P(rb,-.5,f1),P(rt,.5,f1),N(f0),N(f1),N(f1));
 if(rt>0)T(a,[0,.5,0],P(rt,.5,f0),P(rt,.5,f1),[0,1,0],[0,1,0],[0,1,0]);T(a,[0,-.5,0],P(rb,-.5,f1),P(rb,-.5,f0),[0,-1,0],[0,-1,0],[0,-1,0])}return geo(a)}
 const geos=[sphereG(.5),boxG(),coneG(.4,.4),coneG(0,.5)],gS=geos[0];
-const gGround=geo([-200,0,-200,0,1,0,200,0,-200,0,1,0,200,0,200,0,1,0,-200,0,-200,0,1,0,200,0,200,0,1,0,-200,0,200,0,1,0]);
-const gl2=[];for(let i=-200;i<=200;i+=4){gl2.push(i,.01,-200,0,1,0,i,.01,200,0,1,0,-200,.01,i,0,1,0,200,.01,i,0,1,0)}const gGrid=geo(gl2);
+function floorG(par){const a=[],S=4,N=50,n=[0,1,0];for(let i=-N;i<N;i++)for(let j=-N;j<N;j++){if(((i+j)&1)!==par)continue;const x0=i*S,x1=x0+S,z0=j*S,z1=z0+S;T(a,[x0,0,z0],[x1,0,z0],[x1,0,z1],n,n,n);T(a,[x0,0,z0],[x1,0,z1],[x0,0,z1],n,n,n)}return geo(a)}
+const gFA=floorG(0),gFB=floorG(1);
 const lineG={b:gl.createBuffer(),n:2};
 const rgb=h=>[(h>>16&255)/255,(h>>8&255)/255,(h&255)/255],ZERO=[0,0,0];
 function draw(g,x,y,z,s,col,em,yaw,pi,mode){gl.bindBuffer(gl.ARRAY_BUFFER,g.b);gl.vertexAttribPointer(0,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(1,3,gl.FLOAT,false,24,12);const u=PM.u;
-gl.uniform3f(u.uT,x,y,z);gl.uniform1f(u.uS,s);gl.uniform4f(u.uMR,Math.cos(yaw||0),Math.sin(yaw||0),Math.cos(pi||0),Math.sin(pi||0));gl.uniform3fv(u.uC,col);gl.uniform3fv(u.uE,em||ZERO);gl.drawArrays(mode||gl.TRIANGLES,0,g.n)}
+gl.uniform3f(u.uT,x,y,z);if(Array.isArray(s))gl.uniform3f(u.uS,s[0],s[1],s[2]);else gl.uniform3f(u.uS,s,s,s);gl.uniform4f(u.uMR,Math.cos(yaw||0),Math.sin(yaw||0),Math.cos(pi||0),Math.sin(pi||0));gl.uniform3fv(u.uC,col);gl.uniform3fv(u.uE,em||ZERO);gl.drawArrays(mode||gl.TRIANGLES,0,g.n)}
 function drawLine(a,b,col){gl.bindBuffer(gl.ARRAY_BUFFER,lineG.b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([a.x,a.y,a.z,0,1,0,b.x,b.y,b.z,0,1,0]),gl.DYNAMIC_DRAW);draw(lineG,0,0,0,1,col,null,0,0,gl.LINES)}
 let aspect=1;function size(){const d=Math.min(devicePixelRatio||1,2);cv.width=innerWidth*d;cv.height=innerHeight*d;cv.style.width='100%';cv.style.height='100%';gl.viewport(0,0,cv.width,cv.height);aspect=innerWidth/innerHeight}addEventListener('resize',size);size();
 function camU(P,cx,cy,cz,yaw,pi){const u=P.u,f=1/Math.tan(35*Math.PI/180);gl.uniform3f(u.uCam,cx,cy,cz);gl.uniform4f(u.uCS,Math.cos(yaw),Math.sin(yaw),Math.cos(pi),Math.sin(pi));gl.uniform4f(u.uProj,f/aspect,f,.05,300);if(u.uH)gl.uniform1f(u.uH,cv.height)}
@@ -116,11 +132,11 @@ for(let i=0;i<14;i++){const sh=Math.floor(rnd()*4),c=cols[Math.floor(rnd()*6)],s
 function setDot(i){const d=D[i];if(d.o){const o=objs.get(d.o);if(!o)return;const k=o.s/d.s0;Dp[i*3]=o.p.x+d.l.x*k;Dp[i*3+1]=o.p.y+d.l.y*k;Dp[i*3+2]=o.p.z+d.l.z*k}else{Dp[i*3]=d.l.x;Dp[i*3+1]=d.l.y;Dp[i*3+2]=d.l.z}}
 function addDot(c,pid,loc,s0){const i=dn%MAXD;dn++;D[i]={o:pid,l:loc,s0};const h=rgb(parseInt(c.slice(1),16));Dc.set(h,i*3);gl.bindBuffer(gl.ARRAY_BUFFER,cbuf);gl.bufferSubData(gl.ARRAY_BUFFER,i*12,Dc.subarray(i*3,i*3+3));dcount=Math.min(dn,MAXD);setDot(i)}
 const skin=rgb(0xffd1b3),violet=rgb(0x7a5cff),white=[1,1,1],black=[.07,.07,.07];
-function makePeer(){return{pos:new V3(0,1.6,3),yaw:0,pitch:0,hp:[new V3(),new V3()],t:{h:new V3(0,1.6,3),y:0,pi:0,l:[new V3(),new V3()],g:[0,0]}}}
-const me={h:new V3(0,1.6,0),yaw:0,pitch:0,arm:1.1,pull:null,pen:false,ci:0,fly:0,hand:[0,1].map(i=>({ox:i?.45:-.45,oy:-.25,g:false,held:null,off:new V3(),w:new V3(),pw:new V3(),vel:new V3(),down:false,last:new V3(1e9,0,0)}))};
+function makePeer(){return{sk:{c:0,e:0,a:0},pos:new V3(0,1.6,3),yaw:0,pitch:0,hp:[new V3(),new V3()],t:{h:new V3(0,1.6,3),y:0,pi:0,l:[new V3(),new V3()],g:[0,0]}}}
+const me={h:new V3(0,1.6,0),yaw:0,pitch:0,arm:1.1,pull:null,pen:false,ci:0,fly:0,hand:[0,1].map(i=>({ox:i?.45:-.45,oy:-.25,g:false,held:null,off:new V3(),w:new V3(),pw:new V3(),vel:new V3(),down:false,cm:false,last:new V3(1e9,0,0)}))};
 const pal=['#ff6b4a','#ffc23d','#3dbb8a','#3d8bff','#a66bff','#222222'];
 const heldObj=()=>{for(const H of me.hand)if(H.held&&H.held!=='P')return objs.get(H.held)};
-function updUI(){document.querySelectorAll('.hb').forEach(e=>e.classList.toggle('on',me.hand[+e.dataset.i].g));$('pen').classList.toggle('on',me.pen);$('col').style.color=pal[me.ci]}
+function updUI(){document.querySelectorAll('.hb').forEach(e=>{const H=me.hand[+e.dataset.i];e.classList.toggle('on',H.g);e.classList.toggle('cm',H.cm)});$('pen').classList.toggle('on',me.pen);$('col').style.color=pal[me.ci]}
 function release(H){if(H.held&&H.held!=='P'){const o=objs.get(H.held);if(o){o.held=false;o.dirty=true;if(o.f)o.v.set(0,0,0);else o.v.copy(H.vel).clampLength(0,15)}}H.held=null;H.g=false;updUI()}
 function grab(H){let b=null,bd=1e9;objs.forEach(o=>{if(o.held)return;const d=o.p.distanceTo(H.w)-o.s*.5;if(d<.5&&d<bd){bd=d;b=o}});
 H.g=true;if(b){b.par=null;b.held=true;b.own=myId;b.dirty=true;H.held=b.id;H.off.copy(b.p).sub(H.w)}
@@ -135,7 +151,12 @@ cv.onpointermove=e=>{if(lk&&lk.id===e.pointerId){me.yaw-=(e.clientX-lk.x)*.005;m
 cv.onpointerup=cv.onpointercancel=e=>{if(lk&&lk.id===e.pointerId)lk=null};
 document.querySelectorAll('.hb').forEach(el=>{const H=me.hand[+el.dataset.i];let st=null;
 el.onpointerdown=e=>{el.setPointerCapture(e.pointerId);st={id:e.pointerId,x:e.clientX,y:e.clientY,t:performance.now(),m:0};H.down=true};
-el.onpointermove=e=>{if(!st||e.pointerId!==st.id)return;const dx=e.clientX-st.x,dy=e.clientY-st.y;st.m+=Math.abs(dx)+Math.abs(dy);st.x=e.clientX;st.y=e.clientY;H.ox=clamp(H.ox+dx*.006,-1.4,1.4);H.oy=clamp(H.oy-dy*.006,-1.2,1.2)};
+el.onpointermove=e=>{if(!st||e.pointerId!==st.id)return;const dx=e.clientX-st.x,dy=e.clientY-st.y;st.m+=Math.abs(dx)+Math.abs(dy);st.x=e.clientX;st.y=e.clientY;H.ox=clamp(H.ox+dx*.006,-3,3);H.oy=clamp(H.oy-dy*.006,-2.2,2.2)};
+el.onpointerup=el.onpointercancel=()=>{if(!st)return;H.down=false;if(performance.now()-st.t<250&&st.m<12){H.cm=!H.cm;$('c'+el.dataset.i).style.display=H.cm?'flex':'none';updUI();if(H.cm)toast('Двигайте кружок пальцем, тап по кружку — схватить')}st=null}});
+// кружок рядом с рукой: виден только мне, другу не отправляется
+document.querySelectorAll('.circ').forEach(el=>{const H=me.hand[+el.dataset.i];let st=null;
+el.onpointerdown=e=>{el.setPointerCapture(e.pointerId);st={id:e.pointerId,x:e.clientX,y:e.clientY,t:performance.now(),m:0};H.down=true};
+el.onpointermove=e=>{if(!st||e.pointerId!==st.id)return;const dx=e.clientX-st.x,dy=e.clientY-st.y;st.m+=Math.abs(dx)+Math.abs(dy);st.x=e.clientX;st.y=e.clientY;const k=2*me.arm/1.428;H.ox=clamp(H.ox+dx/innerWidth*k*aspect,-3,3);H.oy=clamp(H.oy-dy/innerHeight*k,-2.2,2.2)};
 el.onpointerup=el.onpointercancel=()=>{if(!st)return;H.down=false;if(performance.now()-st.t<250&&st.m<12){H.g?release(H):grab(H)}st=null}});
 $('arm').oninput=e=>me.arm=+e.target.value;
 const hold=(id,v)=>{const e=$(id);e.onpointerdown=()=>me.fly=v;e.onpointerup=e.onpointerleave=e.onpointercancel=()=>{if(me.fly===v)me.fly=0}};hold('up',1);hold('dn',-1);
@@ -151,40 +172,98 @@ $('fs').onclick=()=>{const d=document,e=d.documentElement;if(d.fullscreenElement
 // ---- меню и сеть
 $('mn').onclick=()=>$('menu').style.display='flex';$('solo').onclick=()=>$('menu').style.display='none';
 const send=o=>{if(dc&&dc.readyState==='open')dc.send(JSON.stringify(o))};
-const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
-function gather(){return new Promise(r=>{if(pc.iceGatheringState==='complete')return r();pc.onicegatheringstatechange=()=>pc.iceGatheringState==='complete'&&r();setTimeout(r,5000)})}
-function setup(host){pc=new RTCPeerConnection(ICE);pc.onconnectionstatechange=()=>{$('mps').textContent='Соединение: '+pc.connectionState;if(['failed','disconnected','closed'].includes(pc.connectionState))drop()};
-if(host){dc=pc.createDataChannel('v');bind()}else pc.ondatachannel=e=>{dc=e.channel;bind()}}
-function bind(){dc.onopen=()=>{peer=makePeer();$('hud').textContent='Онлайн: 2 игрока';$('menu').style.display='none';objs.forEach(o=>{if(o.own===myId)o.dirty=true});toast('Игрок подключился')};
+const ICE={iceServers:[
+{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302','stun:global.stun.twilio.com:3478']},
+{urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turns:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]};
+// Браузеры прячут локальные адреса за «xxxx.local» (mDNS), а через Tailscale mDNS не ходит —
+// поэтому подставляем в код свой Tailscale-IP рядом с каждым такими кандидатом (порт тот же).
+const IP_RE=/^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
+function readTS(){const v=$('ts').value.trim();try{localStorage.setItem('vi_ts',v)}catch(_){}if(!v)return'';if(!IP_RE.test(v)){toast('Неверный IP, пример: 100.101.102.103');return null}return v}
+function withTS(d,ip){if(!ip)return d;const out=[];let n=0;
+d.sdp.split(/\r?\n/).forEach(l=>{out.push(l);const m=/^a=candidate:(\S+) (\d+) udp (\d+) (\S+\.local) (\d+) typ host(.*)$/i.exec(l);
+if(m){n++;out.push('a=candidate:ts'+m[1]+' '+m[2]+' udp '+(+m[3]+1)+' '+ip+' '+m[5]+' typ host'+m[6])}});
+return n?{type:d.type,sdp:out.join('\r\n')}:{type:d.type,sdp:d.sdp}}
+function gather(){return new Promise(r=>{if(pc.iceGatheringState==='complete')return r();const p=pc;p.onicegatheringstatechange=()=>p.iceGatheringState==='complete'&&r();setTimeout(r,6000)})}
+const cand={host:0,srflx:0,relay:0};
+function stat(){if(!pc)return;const cs=pc.connectionState||pc.iceConnectionState,ic=pc.iceConnectionState;
+let t='Соединение: '+cs+' · ICE: '+ic+' · кандидаты: host '+cand.host+', srflx '+cand.srflx+', relay '+cand.relay;
+if(cs==='failed'||ic==='failed')t+='\nНе удалось соединиться. Оба впишите Tailscale IP и создайте коды заново.';
+$('mps').textContent=t;$('mps').style.whiteSpace='pre-line'}
+function setup(host){if(pc){try{pc.close()}catch(_){}}cand.host=cand.srflx=cand.relay=0;const p=pc=new RTCPeerConnection(ICE);
+p.onicecandidate=e=>{if(p!==pc||!e.candidate)return;const t=e.candidate.type||(/ typ (\w+)/.exec(e.candidate.candidate)||[])[1];if(t in cand)cand[t]++};
+p.onconnectionstatechange=p.oniceconnectionstatechange=()=>{if(p!==pc)return;stat();if(['failed','closed'].includes(p.connectionState))drop()};
+if(host){dc=p.createDataChannel('v');bind()}else p.ondatachannel=e=>{dc=e.channel;bind()}}
+function bind(){dc.onopen=()=>{peer=makePeer();$('hud').textContent='Онлайн: 2 игрока';$('menu').style.display='none';objs.forEach(o=>{if(o.own===myId)o.dirty=true});toast('Игрок подключился');send({t:'s',c:mySk.c,e:mySk.e,a:mySk.a})};
 dc.onclose=drop;dc.onmessage=e=>{const m=JSON.parse(e.data);
 if(m.t==='p'&&peer){const t=peer.t;t.h.set(...m.h);t.y=m.y;t.pi=m.pi;t.l[0].set(...m.l[0]);t.l[1].set(...m.l[1]);t.g=m.g}
 else if(m.t==='o')m.l.forEach(a=>{let o=objs.get(a.i);if(!o)o=mk(a.i,a.sh,a.c,a.s,a.p,a.w);if(a.w===myId)return;o.own=a.w;o.tp.set(...a.p);o.s=a.s;o.f=a.f;o.par=a.a;o.off.set(...a.q);o.v.set(0,0,0);if(o.held){o.held=false;me.hand.forEach(H=>{if(H.held===o.id){H.held=null;H.g=false}});updUI()}});
+else if(m.t==='s'){if(peer)peer.sk={c:m.c|0,e:m.e|0,a:m.a|0}}
 else if(m.t==='d')addDot(m.c,m.o,new V3(...m.p),m.s);
 else if(m.t==='pull')me.pull={p:new V3(...m.p),t:performance.now()}}}
 function drop(){if(!peer)return;peer=null;me.hand.forEach(H=>{if(H.held==='P'){H.held=null;H.g=false}});updUI();$('hud').textContent='Одиночная игра';toast('Игрок отключился')}
-let role=null;
-function panel(t){$('mp').style.display='block';$('mpt').textContent=t;$('out').value='';$('inp').value=''}
-$('host').onclick=async()=>{role='host';myId='H';panel('1. Скопируйте код и отправьте другу. 2. Вставьте его ответ ниже и нажмите «Подключить».');$('go').textContent='Подключить';setup(true);const o=await pc.createOffer();await pc.setLocalDescription(o);await gather();$('out').value=JSON.stringify(pc.localDescription)};
-$('join').onclick=()=>{role='join';myId='G';me.h.set(0,1.6,3);panel('1. Вставьте код друга и нажмите «Создать ответ». 2. Отправьте полученный код другу.');$('go').textContent='Создать ответ';setup(false)};
-$('go').onclick=async()=>{try{const d=JSON.parse($('inp').value.trim());if(role==='host')await pc.setRemoteDescription(d);else{await pc.setRemoteDescription(d);const a=await pc.createAnswer();await pc.setLocalDescription(a);await gather();$('out').value=JSON.stringify(pc.localDescription)}}catch(_){$('mps').textContent='Неверный код. Скопируйте его целиком.'}};
+let role=null;try{$('ts').value=localStorage.getItem('vi_ts')||''}catch(_){}
+function panel(t){$('mp').style.display='block';$('mpt').textContent=t;$('out').value='';$('inp').value='';$('mps').textContent=''}
+$('host').onclick=async()=>{const ip=readTS();if(ip===null)return;role='host';myId='H';panel('1. Скопируйте код и отправьте другу. 2. Вставьте его ответ ниже и нажмите «Подключить».');$('go').textContent='Подключить';
+try{setup(true);const o=await pc.createOffer();await pc.setLocalDescription(o);await gather();$('out').value=JSON.stringify(withTS(pc.localDescription,ip))}catch(e){$('mps').textContent='Ошибка: '+e.message}};
+$('join').onclick=()=>{const ip=readTS();if(ip===null)return;role='join';myId='G';me.h.set(0,1.6,3);panel('1. Вставьте код друга и нажмите «Создать ответ». 2. Отправьте полученный код другу.');$('go').textContent='Создать ответ';try{setup(false)}catch(e){$('mps').textContent='Ошибка: '+e.message}};
+$('go').onclick=async()=>{let d;try{d=JSON.parse($('inp').value.trim())}catch(_){$('mps').textContent='Неверный код. Скопируйте его целиком.';return}
+const ip=readTS();if(ip===null)return;
+try{if(role==='host')await pc.setRemoteDescription(d);else{await pc.setRemoteDescription(d);const a=await pc.createAnswer();await pc.setLocalDescription(a);$('mps').textContent='Собираю адреса…';await gather();$('out').value=JSON.stringify(withTS(pc.localDescription,ip));stat()}}catch(e){$('mps').textContent='Ошибка: '+e.message}};
 $('cp').onclick=()=>{$('out').select();try{document.execCommand('copy');toast('Код скопирован')}catch(_){}};
+// ---- скины
+const ACOL=[0x7a5cff,0xff5a5a,0xff9a3d,0xffd23d,0x3dbb8a,0x3d8bff,0xff7eb6,0xf2f2f2,0x333333];
+const EYE=['Обычные','Милые','Точки','Большие','Сердечки','Сонные','Синие','Золотые','Кошачьи','Циклоп'];
+const ACC=['Нет','Цилиндр','Колпак','Корона','Ушки','Рожки','Антенна','Очки','Нимб','Усы','Шапочка'];
+let mySk={c:0,e:0,a:0};try{const q=JSON.parse(localStorage.getItem('vi_sk')||'null');if(q)mySk={c:(q.c|0)%ACOL.length,e:(q.e|0)%EYE.length,a:(q.a|0)%ACC.length}}catch(_){}
+function drawAvatar(p,yaw,pi,sk,k){
+const col=rgb(ACOL[sk.c]||ACOL[0]);draw(gS,p.x,p.y,p.z,.6*k,col,null,yaw,pi);
+const part=(g,x,y,z,s,c,em,fl)=>{const q=new V3(x*k,y*k,z*k).applyYP(yaw,pi).add(p);draw(g,q.x,q.y,q.z,Array.isArray(s)?s.map(v=>v*k):s*k,c,em,yaw,fl?pi+Math.PI:pi)};
+const sp=gS,cy=geos[2],cn=geos[3],B=[.07,.07,.07],W=[1,1,1],pink=rgb(0xff4f8b),gold=rgb(0xffd23d),red=rgb(0xe33b3b),blue=rgb(0x3d8bff);
+if(sk.e===9){part(sp,0,.05,-.2,.3,W);part(sp,0,.05,-.29,.14,B)}
+else[-1,1].forEach(s=>{const x=s*.11;switch(sk.e){
+case 1:part(sp,x,.04,-.25,.2,B);part(sp,x+.03,.09,-.33,.07,W);part(sp,x-.03,-.01,-.345,.035,W);break;
+case 2:part(sp,x,.05,-.285,.1,B);break;
+case 3:part(sp,x*1.1,.05,-.22,.26,W);part(sp,x*1.1,.05,-.3,.13,B);break;
+case 4:part(sp,x-.025,.075,-.285,.09,pink);part(sp,x+.025,.075,-.285,.09,pink);part(cn,x,.035,-.285,[.12,.1,.12],pink,null,true);break;
+case 5:part(sp,x,.04,-.275,[.2,.05,.05],B);break;
+case 6:part(sp,x,.05,-.25,.2,W);part(sp,x,.05,-.3,.12,blue);part(sp,x,.05,-.335,.06,B);break;
+case 7:part(sp,x,.05,-.26,.18,gold,[.25,.2,0]);part(sp,x+.03,.09,-.33,.05,W);break;
+case 8:part(sp,x,.05,-.255,.19,rgb(0x7be36b));part(sp,x,.05,-.345,[.03,.15,.03],B);break;
+default:part(sp,x,.05,-.24,.17,W);part(sp,x,.05,-.31,.08,B)}});
+switch(sk.a){
+case 1:part(cy,0,.25,0,[.76,.04,.76],B);part(cy,0,.4,0,[.5,.3,.5],B);part(cy,0,.31,0,[.52,.06,.52],red);break;
+case 2:part(cn,0,.45,0,[.5,.5,.5],rgb(0xa66bff));part(sp,0,.72,0,.12,pink);break;
+case 3:part(cy,0,.27,0,[.56,.1,.56],gold);for(let i=0;i<5;i++){const t=i/5*6.2832;part(cn,Math.cos(t)*.18,.37,Math.sin(t)*.18,[.12,.18,.12],gold)}break;
+case 4:[-1,1].forEach(s=>{part(cn,s*.18,.27,0,[.2,.24,.2],col);part(cn,s*.18,.26,-.03,[.1,.14,.1],pink)});break;
+case 5:[-1,1].forEach(s=>part(cn,s*.13,.31,-.04,[.1,.22,.1],red));break;
+case 6:part(cy,0,.4,0,[.05,.25,.05],[.3,.3,.3]);part(sp,0,.55,0,.1,red,[.5,0,0]);break;
+case 7:[-1,1].forEach(s=>part(sp,s*.11,.05,-.33,[.2,.15,.08],B));part(bx0,0,.06,-.3,[.06,.03,.03],B);break;
+case 8:part(cy,0,.55,0,[.5,.03,.5],gold,[.6,.5,0]);break;
+case 9:[-1,1].forEach(s=>part(sp,s*.07,-.08,-.285,[.16,.05,.05],B));break;
+case 10:part(sp,0,.2,0,[.66,.34,.66],blue);part(sp,0,.4,0,.12,W);break}}
+const bx0=geos[1];
+function saveSk(){try{localStorage.setItem('vi_sk',JSON.stringify(mySk))}catch(_){}send({t:'s',c:mySk.c,e:mySk.e,a:mySk.a})}
+function refEd(){[['gc','c'],['ge','e'],['ga','a']].forEach(([id,k])=>$(id).childNodes.forEach(b=>b.classList.toggle('on',+b.dataset.i===mySk[k])))}
+[['gc',ACOL,'c',1],['ge',EYE,'e'],['ga',ACC,'a']].forEach(([id,arr,key,sw])=>arr.forEach((n,i)=>{const b=document.createElement('button');b.dataset.i=i;if(sw){b.className='sw';b.style.background='#'+n.toString(16).padStart(6,'0')}else{b.className='ch';b.textContent=n}b.onclick=()=>{mySk[key]=i;saveSk();refEd()};$(id).appendChild(b)}));
+refEd();
+$('sk').onclick=()=>{const on=document.body.classList.toggle('edit');$('ed').style.display=on?'block':'none';$('sk').classList.toggle('on',on);if(on)$('menu').style.display='none'};
+$('edx').onclick=()=>{document.body.classList.remove('edit');$('ed').style.display='none';$('sk').classList.remove('on')};
 // ---- цикл
-const mv=new V3(),tmp=new V3(),gc=rgb(0xf4efe3),ic=rgb(0xd5e8ec);let last=performance.now(),acc=0,acc2=0;
+const mv=new V3(),tmp=new V3(),fa=rgb(0xeadfc4),fb=rgb(0xd3c4a1);let last=performance.now(),acc=0,acc2=0;
 const lerpA=(a,b,k)=>a+((b-a+Math.PI*3)%(Math.PI*2)-Math.PI)*k;
 function render(){gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(PM.p);camU(PM,me.h.x,me.h.y,me.h.z,me.yaw,me.pitch);
-draw(gGround,0,0,0,1,gc);draw(gGrid,0,0,0,1,ic,null,0,0,gl.LINES);
+draw(gFA,0,0,0,1,fa);draw(gFB,0,0,0,1,fb);
 objs.forEach(o=>draw(geos[o.sh],o.p.x,o.p.y,o.p.z,o.s,rgb(o.c),o.f?[.1,.33,.4]:ZERO));
-me.hand.forEach(H=>draw(gS,H.w.x,H.w.y,H.w.z,(H.g?.16:.22),skin));
-if(peer){const p=peer.pos;draw(gS,p.x,p.y,p.z,.6,violet,null,peer.yaw,peer.pitch);
-[-1,1].forEach(k=>{const e=new V3(k*.11,.05,-.24).applyYP(peer.yaw,peer.pitch).add(p),q=new V3(k*.11,.05,-.31).applyYP(peer.yaw,peer.pitch).add(p);draw(gS,e.x,e.y,e.z,.17,white);draw(gS,q.x,q.y,q.z,.08,black)});
-[0,1].forEach(i=>{const h=peer.hp[i];draw(gS,h.x,h.y,h.z,peer.t.g[i]?.2:.26,violet);drawLine(new V3(p.x,p.y-.2,p.z),h,violet)})}
+{const hc=rgb(ACOL[mySk.c]||ACOL[0]);me.hand.forEach(H=>draw(gS,H.w.x,H.w.y,H.w.z,(H.g?.16:.22),hc))}
+if(peer){drawAvatar(peer.pos,peer.yaw,peer.pitch,peer.sk,1);const pc2=rgb(ACOL[peer.sk.c]||ACOL[0]);[0,1].forEach(i=>{const h=peer.hp[i];draw(gS,h.x,h.y,h.z,peer.t.g[i]?.2:.26,pc2)})}
+if(document.body.classList.contains('edit')){const d=2.4,ox=-(($('ed').offsetWidth+8)/innerWidth)*d*aspect/1.428,t=performance.now()/900;drawAvatar(new V3(ox,-.05,-d).applyYP(me.yaw,me.pitch).add(me.h),me.yaw+Math.PI+Math.sin(t)*.6,0,mySk,1.8)}
 if(dcount){gl.useProgram(PP.p);camU(PP,me.h.x,me.h.y,me.h.z,me.yaw,me.pitch);
 gl.bindBuffer(gl.ARRAY_BUFFER,pbuf);gl.bufferSubData(gl.ARRAY_BUFFER,0,Dp.subarray(0,dcount*3));gl.vertexAttribPointer(0,3,gl.FLOAT,false,0,0);
 gl.bindBuffer(gl.ARRAY_BUFFER,cbuf);gl.vertexAttribPointer(1,3,gl.FLOAT,false,0,0);gl.drawArrays(gl.POINTS,0,dcount)}}
 function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/1000,.05)||.016;last=now;
 const sy=Math.sin(me.yaw),cy=Math.cos(me.yaw);mv.set(sy*jv.y+cy*jv.x,0,cy*jv.y-sy*jv.x).multiplyScalar(6*dt);me.h.add(mv);me.h.y=clamp(me.h.y+me.fly*4*dt,.4,40);
 if(me.pull&&now-me.pull.t<300)me.h.lerp(me.pull.p,.3);
-me.hand.forEach(H=>{H.pw.copy(H.w);H.w.set(H.ox,H.oy,-me.arm).applyYP(me.yaw,me.pitch).add(me.h);tmp.subVectors(H.w,H.pw).divideScalar(dt);H.vel.lerp(tmp,.3);
+me.hand.forEach(H=>{H.pw.copy(H.w);H.w.set(H.ox,H.oy,-me.arm).applyYP(me.yaw,me.pitch).add(me.h);if(H.w.y<.08)H.w.y=.08;tmp.subVectors(H.w,H.pw).divideScalar(dt);H.vel.lerp(tmp,.3);
 if(H.held==='P'){if(!peer)release(H);else H.pt=H.w.clone().add(H.off)}
 else if(H.held){const o=objs.get(H.held);if(o){o.p.copy(H.w).add(H.off);o.v.set(0,0,0)}}
 if(me.pen&&H.down&&!H.g&&H.w.distanceTo(H.last)>.05){H.last.copy(H.w);let b=null,bd=1e9;objs.forEach(o=>{const d=o.p.distanceTo(H.w)-o.s*.5;if(d<.25&&d<bd){bd=d;b=o}});
@@ -198,6 +277,7 @@ acc+=dt;acc2+=dt;
 if(acc>.05&&dc&&dc.readyState==='open'){acc=0;send({t:'p',h:me.h.toArray().map(r3),y:r3(me.yaw),pi:r3(me.pitch),l:me.hand.map(H=>H.w.toArray().map(r3)),g:me.hand.map(H=>H.g?1:0)});
 me.hand.forEach(H=>{if(H.held==='P'&&H.pt)send({t:'pull',p:H.pt.toArray().map(r3)})})}
 if(acc2>.1){acc2=0;if(dc&&dc.readyState==='open'){const l=[];objs.forEach(o=>{if(o.own!==myId)return;if(o.dirty||o.p.distanceToSquared(o.lp)>1e-6){o.dirty=false;o.lp.copy(o.p);l.push({i:o.id,sh:o.sh,c:o.c,s:r3(o.s),p:o.p.toArray().map(r3),f:o.f,a:o.par,q:o.off.toArray().map(r3),w:o.own})}});if(l.length)send({t:'o',l})}}
+me.hand.forEach((H,i)=>{if(!H.cm)return;const f=1.428,x=(H.ox*f/aspect/me.arm+1)/2*innerWidth+(i?58:-58),y=(1-H.oy*f/me.arm)/2*innerHeight+66;$('c'+i).style.transform='translate('+(clamp(x,40,innerWidth-40)-36)+'px,'+(clamp(y,70,innerHeight-40)-36)+'px)'});
 render()}
 updUI();requestAnimationFrame(frame);
 </script></body></html>
