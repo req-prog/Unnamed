@@ -26,6 +26,10 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .ch.on{background:var(--ac);color:#fff;box-shadow:none}
 .sw{width:38px;height:38px;border-radius:50%;border:0;box-shadow:inset 0 0 0 2px var(--ln)}
 .sw.on{box-shadow:0 0 0 3px var(--ac)}
+body.rb #fly{display:none!important}
+#jmp{position:fixed;right:calc(22px + env(safe-area-inset-right,0px));bottom:calc(30px + env(safe-area-inset-bottom,0px));width:120px;height:120px;border-radius:50%;font-size:44px;display:none;touch-action:none}
+body.rb #jmp{display:block}body.edit #jmp{display:none!important}
+body.rb #hands,body.rb #arm,body.rb .circ,body.rb #pen,body.rb #col,body.rb #frz,body.rb #big,body.rb #sml,body.rb #wld{display:none!important}
 body.edit #hands,body.edit #fly,body.edit #joy,body.edit #arm,body.edit .circ{display:none!important}
 #arm{position:fixed;left:30%;width:40%;bottom:calc(8px + env(safe-area-inset-bottom,0px))}
 #toast{position:fixed;left:50%;top:40%;transform:translateX(-50%);background:var(--ui);padding:8px 14px;border-radius:12px;opacity:0;transition:opacity .25s;pointer-events:none;text-align:center;max-width:80%}
@@ -45,11 +49,12 @@ input.ip{width:100%;box-sizing:border-box;height:40px;margin-top:6px;border-radi
 <button class="b" id="fs" title="Полный экран">⛶</button><button class="b" id="mn" title="Меню">☰</button>
 <button class="b" id="pen" title="Рисовать">✏️</button><button class="b" id="col" title="Цвет">●</button>
 <button class="b" id="frz" title="Заморозить">❄</button><button class="b" id="big" title="Больше">⤢</button><button class="b" id="sml" title="Меньше">⤡</button>
-<button class="b" id="wld" title="Склеить">🔗</button><button class="b" id="spw" title="Создать предмет">🧱</button><button class="b" id="sk" title="Скин">🎨</button>
+<button class="b" id="wld" title="Склеить">🔗</button><button class="b" id="spw" title="Создать предмет">🧱</button><button class="b" id="rbt" title="Роблоксианец">🧍</button><button class="b" id="sk" title="Скин">🎨</button>
 </div>
 <div id="joy"><div id="knob"></div></div>
 <div id="fly"><button class="b" id="up">▲</button><button class="b" id="dn">▼</button></div>
 <input type="range" id="arm" min="0.5" max="2.4" step="0.05" value="1.1">
+<button class="b" id="jmp">▲</button>
 <div id="hands"><button class="b hb" data-i="0">Л</button><button class="b hb" data-i="1">П</button></div>
 <div id="c0" class="circ" data-i="0">Л</div><div id="c1" class="circ" data-i="1">П</div>
 <div id="ed"><div class="eh"><b>Скин</b><button class="b" id="edx">✕</button></div><div class="el">Цвет</div><div class="eg" id="gc"></div><div class="el">Глаза</div><div class="eg" id="ge"></div><div class="el">Аксессуар</div><div class="eg" id="ga"></div></div>
@@ -70,7 +75,7 @@ input.ip{width:100%;box-sizing:border-box;height:40px;margin-top:6px;border-radi
 <button class="b" id="go"></button>
 <p id="mps"></p>
 </div>
-<p><b>Управление.</b> Левый джойстик — лететь, ▲▼ — вверх и вниз. Тяните по экрану — смотреть. Нажмите Л или П — рядом с рукой появится кружок (его видите только вы). Ведите кружок пальцем — рука двигается за ним, короткий тап по кружку — схватить или отпустить. Ещё раз Л/П — убрать кружок. Ползунок внизу — длина руки. Включённый ✏️ и зажатый кружок — рука рисует. 🎨 — редактор скина: цвет, глаза и аксессуары.</p>
+<p><b>Управление.</b> Левый джойстик — лететь, ▲▼ — вверх и вниз. Тяните по экрану — смотреть. Нажмите Л или П — рядом с рукой появится кружок (его видите только вы). Ведите кружок пальцем — рука двигается за ним, короткий тап по кружку — схватить или отпустить. Ещё раз Л/П — убрать кружок. Ползунок внизу — длина руки. Включённый ✏️ и зажатый кружок — рука рисует. 🎨 — редактор скина: цвет, глаза и аксессуары. 🧍 — превратиться в маленького роблоксианца (размером с руку): он не проходит сквозь блоки, прыгает большой кнопкой ▲ справа, стоит на руках и голове VR-игроков. VR-игрок может взять роблоксианца рукой (тап по кружку рядом с ним).</p>
 </div></div>
 <script>
 function showErr(t){const d=document.createElement('div');d.style.cssText='position:fixed;left:8px;right:8px;top:8px;z-index:99;background:#b00020;color:#fff;padding:10px;border-radius:8px;font:13px monospace;user-select:text';d.textContent=t;document.body.appendChild(d)}
@@ -132,15 +137,15 @@ for(let i=0;i<14;i++){const sh=Math.floor(rnd()*4),c=cols[Math.floor(rnd()*6)],s
 function setDot(i){const d=D[i];if(d.o){const o=objs.get(d.o);if(!o)return;const k=o.s/d.s0;Dp[i*3]=o.p.x+d.l.x*k;Dp[i*3+1]=o.p.y+d.l.y*k;Dp[i*3+2]=o.p.z+d.l.z*k}else{Dp[i*3]=d.l.x;Dp[i*3+1]=d.l.y;Dp[i*3+2]=d.l.z}}
 function addDot(c,pid,loc,s0){const i=dn%MAXD;dn++;D[i]={o:pid,l:loc,s0};const h=rgb(parseInt(c.slice(1),16));Dc.set(h,i*3);gl.bindBuffer(gl.ARRAY_BUFFER,cbuf);gl.bufferSubData(gl.ARRAY_BUFFER,i*12,Dc.subarray(i*3,i*3+3));dcount=Math.min(dn,MAXD);setDot(i)}
 const skin=rgb(0xffd1b3),violet=rgb(0x7a5cff),white=[1,1,1],black=[.07,.07,.07];
-function makePeer(){return{sk:{c:0,e:0,a:0},pos:new V3(0,1.6,3),yaw:0,pitch:0,hp:[new V3(),new V3()],t:{h:new V3(0,1.6,3),y:0,pi:0,l:[new V3(),new V3()],g:[0,0]}}}
-const me={h:new V3(0,1.6,0),yaw:0,pitch:0,arm:1.1,pull:null,pen:false,ci:0,fly:0,hand:[0,1].map(i=>({ox:i?.45:-.45,oy:-.25,g:false,held:null,off:new V3(),w:new V3(),pw:new V3(),vel:new V3(),down:false,cm:false,last:new V3(1e9,0,0)}))};
-const pal=['#ff6b4a','#ffc23d','#3dbb8a','#3d8bff','#a66bff','#222222'];
+function makePeer(){return{sk:{c:0,e:0,a:0},pos:new V3(0,1.6,3),yaw:0,pitch:0,rb:false,st:0,hp:[new V3(),new V3()],t:{r:0,h:new V3(0,1.6,3),y:0,pi:0,l:[new V3(),new V3()],g:[0,0]}}}
+const me={rb:false,vy:0,cl:false,gr:false,face:0,st:0,jh:false,sup:null,supP:new V3(),wn:new V3(),h:new V3(0,1.6,0),yaw:0,pitch:0,arm:1.1,pull:null,pen:false,ci:0,fly:0,hand:[0,1].map(i=>({ox:i?.45:-.45,oy:-.25,g:false,held:null,off:new V3(),w:new V3(),pw:new V3(),vel:new V3(),down:false,cm:false,last:new V3(1e9,0,0)}))};
+const cam=new V3(0,1.6,0);const pal=['#ff6b4a','#ffc23d','#3dbb8a','#3d8bff','#a66bff','#222222'];
 const heldObj=()=>{for(const H of me.hand)if(H.held&&H.held!=='P')return objs.get(H.held)};
 function updUI(){document.querySelectorAll('.hb').forEach(e=>{const H=me.hand[+e.dataset.i];e.classList.toggle('on',H.g);e.classList.toggle('cm',H.cm)});$('pen').classList.toggle('on',me.pen);$('col').style.color=pal[me.ci]}
 function release(H){if(H.held&&H.held!=='P'){const o=objs.get(H.held);if(o){o.held=false;o.dirty=true;if(o.f)o.v.set(0,0,0);else o.v.copy(H.vel).clampLength(0,15)}}H.held=null;H.g=false;updUI()}
 function grab(H){let b=null,bd=1e9;objs.forEach(o=>{if(o.held)return;const d=o.p.distanceTo(H.w)-o.s*.5;if(d<.5&&d<bd){bd=d;b=o}});
 H.g=true;if(b){b.par=null;b.held=true;b.own=myId;b.dirty=true;H.held=b.id;H.off.copy(b.p).sub(H.w)}
-else if(peer&&peer.pos.distanceTo(H.w)<.9){H.held='P';H.off.copy(peer.pos).sub(H.w)}updUI()}
+else if(peer&&(peer.rb?peerC().distanceTo(H.w)<.6:peer.pos.distanceTo(H.w)<.9)){H.held='P';H.off.copy(peer.pos).sub(H.w)}updUI()}
 // ---- ввод
 let jid=null;const jv={x:0,y:0},J=$('joy'),K=$('knob');
 function jm(e){const r=J.getBoundingClientRect();let x=(e.clientX-r.left-r.width/2)/(r.width/2),y=(e.clientY-r.top-r.height/2)/(r.height/2);const l=Math.hypot(x,y);if(l>1){x/=l;y/=l}jv.x=x;jv.y=y;K.style.transform=`translate(${x*35}px,${y*35}px)`}
@@ -167,7 +172,7 @@ function sc(k){const o=need();if(!o)return;const ns=clamp(o.s*k,.3,6),r=ns/o.s;o
 $('big').onclick=()=>sc(1.18);$('sml').onclick=()=>sc(1/1.18);
 $('wld').onclick=()=>{const o=need();if(!o)return;let b=null,bd=1e9;objs.forEach(c=>{if(c===o||c.par||o.par===c.id)return;const d=c.p.distanceTo(o.p)-(c.s+o.s)*.5;if(d<.6&&d<bd){bd=d;b=c}});
 if(b){b.par=o.id;b.off.copy(b.p).sub(o.p);b.own=myId;b.f=false;b.dirty=true;toast('Склеено')}else{let n=0;objs.forEach(c=>{if(c.par===o.id){c.par=null;c.own=myId;c.dirty=true;n++}});toast(n?'Разъединено':'Рядом нет предметов')}};
-$('spw').onclick=()=>{const p=new V3(0,0,-2).applyYP(me.yaw,me.pitch).add(me.h),s=.6+Math.random()*.9;const o=mk(myId+(seq++),Math.floor(Math.random()*4),cols[Math.floor(Math.random()*6)],s,[p.x,Math.max(p.y,s*.5),p.z],myId);o.dirty=true};
+$('spw').onclick=()=>{const p=new V3(0,0,me.rb?-3.2:-2).applyYP(me.yaw,me.pitch).add(me.rb?cam:me.h),s=.6+Math.random()*.9;const o=mk(myId+(seq++),Math.floor(Math.random()*4),cols[Math.floor(Math.random()*6)],s,[p.x,Math.max(p.y,s*.5),p.z],myId);o.dirty=true};
 $('fs').onclick=()=>{const d=document,e=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const f=e.requestFullscreen||e.webkitRequestFullscreen;if(f){const r=f.call(e);if(r&&r.then)r.then(()=>{try{screen.orientation.lock('landscape').catch(()=>{})}catch(_){}}).catch(()=>toast('Не удалось включить полный экран'))}else toast('Этот браузер не поддерживает полный экран. Добавьте страницу на экран «Домой».')}};
 // ---- меню и сеть
 $('mn').onclick=()=>$('menu').style.display='flex';$('solo').onclick=()=>$('menu').style.display='none';
@@ -195,7 +200,7 @@ p.onconnectionstatechange=p.oniceconnectionstatechange=()=>{if(p!==pc)return;sta
 if(host){dc=p.createDataChannel('v');bind()}else p.ondatachannel=e=>{dc=e.channel;bind()}}
 function bind(){dc.onopen=()=>{peer=makePeer();$('hud').textContent='Онлайн: 2 игрока';$('menu').style.display='none';objs.forEach(o=>{if(o.own===myId)o.dirty=true});toast('Игрок подключился');send({t:'s',c:mySk.c,e:mySk.e,a:mySk.a})};
 dc.onclose=drop;dc.onmessage=e=>{const m=JSON.parse(e.data);
-if(m.t==='p'&&peer){const t=peer.t;t.h.set(...m.h);t.y=m.y;t.pi=m.pi;t.l[0].set(...m.l[0]);t.l[1].set(...m.l[1]);t.g=m.g}
+if(m.t==='p'&&peer){const t=peer.t;t.h.set(...m.h);t.r=m.r|0;t.y=m.y;t.pi=m.pi;t.l[0].set(...m.l[0]);t.l[1].set(...m.l[1]);t.g=m.g}
 else if(m.t==='o')m.l.forEach(a=>{let o=objs.get(a.i);if(!o)o=mk(a.i,a.sh,a.c,a.s,a.p,a.w);if(a.w===myId)return;o.own=a.w;o.tp.set(...a.p);o.s=a.s;o.f=a.f;o.par=a.a;o.off.set(...a.q);o.v.set(0,0,0);if(o.held){o.held=false;me.hand.forEach(H=>{if(H.held===o.id){H.held=null;H.g=false}});updUI()}});
 else if(m.t==='s'){if(peer)peer.sk={c:m.c|0,e:m.e|0,a:m.a|0}}
 else if(m.t==='d')addDot(m.c,m.o,new V3(...m.p),m.s);
@@ -248,20 +253,82 @@ function refEd(){[['gc','c'],['ge','e'],['ga','a']].forEach(([id,k])=>$(id).chil
 refEd();
 $('sk').onclick=()=>{const on=document.body.classList.toggle('edit');$('ed').style.display=on?'block':'none';$('sk').classList.toggle('on',on);if(on)$('menu').style.display='none'};
 $('edx').onclick=()=>{document.body.classList.remove('edit');$('ed').style.display='none';$('sk').classList.remove('on')};
+// ---- роблоксианец: маленький (с руку) человечек
+const RR=.1,RH=.4,RS=2.6; // радиус, рост, скорость
+const peerC=()=>new V3(peer.pos.x,peer.pos.y+.2,peer.pos.z);
+function drawRoblox(p,yaw,sk,st,k){
+const t=performance.now()/1000,w=Math.sin(t*11)*.8,col=rgb(ACOL[sk.c]||ACOL[0]),Y=rgb(0xf5cd30),L=rgb(0x4b974b),B=[.07,.07,.07],bx=geos[1],cy=geos[2];
+const put=(g,x,y,z,s,c,a)=>{const q=new V3(x*k,y*k,z*k).applyYP(yaw,0).add(p);draw(g,q.x,q.y,q.z,s.map(v=>v*k),c,null,yaw,a||0)};
+const limb=(sx,hy,len,wd,c,a)=>put(bx,sx,hy-len/2*Math.cos(a),-len/2*Math.sin(a),[wd,len,wd],c,a);
+let la=0,ra=0,al=0,ar=0;
+if(st===1){la=w;ra=-w;al=-w*.9;ar=w*.9}
+else if(st===2){const s=Math.sin(t*9);la=s*.5;ra=-s*.5;al=2.9+s*.4;ar=2.9-s*.4}
+else if(st===3){la=.45;ra=-.45;al=ar=2.5}
+limb(-.04,.16,.16,.075,L,la);limb(.04,.16,.16,.075,L,ra);
+put(bx,0,.24,0,[.16,.16,.08],col);
+limb(-.12,.31,.15,.075,Y,al);limb(.12,.31,.15,.075,Y,ar);
+put(cy,0,.36,0,[.12,.08,.12],Y);
+put(bx,-.02,.365,-.047,[.016,.02,.01],B);put(bx,.02,.365,-.047,[.016,.02,.01],B);put(bx,0,.34,-.047,[.04,.01,.01],B)}
+// столкновения: возвращают вектор, на который надо вытолкнуть роблоксианца
+function hitSph(p,c,r){const y1=p.y+RR,y2=p.y+RH-RR,cy=clamp(c.y,y1,y2),dx=p.x-c.x,dy=cy-c.y,dz=p.z-c.z,d=Math.hypot(dx,dy,dz),R=r+RR;if(d>=R)return null;if(d<1e-5)return{x:0,y:R,z:0};const k=(R-d)/d;return{x:dx*k,y:dy*k,z:dz*k}}
+function hitSolid(p,o,py){const s=o.s,h=s/2,top=o.p.y+h,bot=o.p.y-h;if(p.y>=top||p.y+RH<=bot)return null;
+if(o.sh===0)return hitSph(p,o.p,h);
+const dx=p.x-o.p.x,dz=p.z-o.p.z;let ph,hx=0,hz=0;
+if(o.sh===1){const ax=h+RR-Math.abs(dx),az=h+RR-Math.abs(dz);if(ax<=0||az<=0)return null;if(ax<az){ph=ax;hx=Math.sign(dx)||1}else{ph=az;hz=Math.sign(dz)||1}}
+else{const dh=Math.hypot(dx,dz),rc=o.sh===2?.4*s:.5*s*(1-clamp((p.y+.05-bot)/s,0,1));ph=rc+RR-dh;if(ph<=0)return null;if(dh<1e-4)hx=1;else{hx=dx/dh;hz=dz/dh}}
+const pu=top-p.y,pd=p.y+RH-bot;
+if(py>=top-.02||(pu<=ph&&pu<=pd))return{x:0,y:pu,z:0};
+if(pd<ph&&pd<pu)return{x:0,y:-pd,z:0};
+return{x:hx*ph,y:0,z:hz*ph}}
+function rbCols(){const a=[];objs.forEach(o=>a.push({k:o.id,c:o.p,f:(q,py)=>hitSolid(q,o,py)}));
+if(peer){if(peer.rb){const c=peerC();a.push({k:'pr',c,f:q=>hitSph(q,c,.17)})}
+else{a.push({k:'ph',c:peer.pos,f:q=>hitSph(q,peer.pos,.33)});peer.hp.forEach((h,i)=>a.push({k:'p'+i,c:h,f:q=>hitSph(q,h,.17)}))}}return a}
+function ptIn(o,q){const h=o.s/2,dy=q.y-o.p.y;if(Math.abs(dy)>=h)return false;const dx=q.x-o.p.x,dz=q.z-o.p.z;
+if(o.sh===1)return Math.abs(dx)<h&&Math.abs(dz)<h;if(o.sh===0)return dx*dx+dy*dy+dz*dz<h*h;
+const r=o.sh===2?.4*o.s:.5*o.s*(.5-dy/o.s);return dx*dx+dz*dz<r*r}
+const inSolid=q=>{for(const o of objs.values())if(ptIn(o,q))return true;return false};
+function rbUpdate(dt,now){const p=me.h,sy=Math.sin(me.yaw),cy=Math.cos(me.yaw),dx=sy*jv.y+cy*jv.x,dz=cy*jv.y-sy*jv.x,mv2=Math.hypot(dx,dz)>.12,dir=mv2?new V3(dx,0,dz):new V3();
+if(mv2)me.face=lerpA(me.face,Math.atan2(-dx,-dz),Math.min(1,dt*14));
+if(me.pull&&now-me.pull.t<300){me.vy=0;me.cl=false;me.sup=null;me.st=3} // VR-игрок держит нас в руке
+else{const cols=rbCols();
+if(me.sup){const c=cols.find(q=>q.k===me.sup);if(c){p.x+=c.c.x-me.supP.x;p.y+=c.c.y-me.supP.y;p.z+=c.c.z-me.supP.z;me.supP.copy(c.c)}else me.sup=null} // едем вместе с рукой/блоком
+if(me.fly>0){if(!me.jh&&(me.gr||me.cl)){me.vy=6.5;me.cl=false}me.jh=true}else me.jh=false;
+const n=Math.ceil(dt/.012),h=dt/n;let gr=false,sup=null;
+for(let s=0;s<n;s++){const py=p.y;let wall=null;gr=false;sup=null;
+p.x+=dir.x*RS*h;p.z+=dir.z*RS*h;
+me.vy=me.cl?(me.fly<0?-1.4:1.4):Math.max(me.vy-14*h,-10);
+p.y+=me.vy*h;
+for(let it=0;it<3;it++){let hit=false;
+for(const c of cols){const m=c.f(p,py);if(!m)continue;hit=true;p.x+=m.x;p.y+=m.y;p.z+=m.z;const L=Math.hypot(m.x,m.y,m.z)||1,ny=m.y/L;
+if(ny>.5){gr=true;sup=c}else if(ny<-.5){if(me.vy>0)me.vy=0}else wall={x:m.x/L,z:m.z/L}}
+if(!hit)break}
+if(p.y<=0){p.y=0;gr=true;sup=null}
+if(gr&&me.vy<0)me.vy=0;
+me.cl=false}
+me.gr=gr;me.sup=sup?sup.k:null;if(sup)me.supP.copy(sup.c);
+me.st=me.cl?2:!gr?3:mv2?1:0}
+// камера от третьего лица, не лезет внутрь блоков
+const f=[-Math.sin(me.yaw)*Math.cos(me.pitch),Math.sin(me.pitch),-Math.cos(me.yaw)*Math.cos(me.pitch)],D=1.4;let dist=D;
+for(let i=1;i<=8;i++){const d=D*i/8,q=new V3(p.x-f[0]*d,p.y+.3-f[1]*d,p.z-f[2]*d);if(q.y<.08||inSolid(q)){dist=Math.max(.2,D*(i-1)/8);break}}
+cam.set(p.x-f[0]*dist,Math.max(.08,p.y+.3-f[1]*dist),p.z-f[2]*dist)}
+hold('jmp',1);
+$('rbt').onclick=()=>{me.rb=!me.rb;document.body.classList.toggle('rb',me.rb);$('rbt').classList.toggle('on',me.rb);me.fly=0;me.sup=null;me.vy=0;me.cl=false;
+if(me.rb){me.hand.forEach((H,i)=>{release(H);H.cm=false;H.down=false;$('c'+i).style.display='none'});me.h.y=Math.max(0,me.h.y-.3);me.face=me.yaw;updUI();toast('Вы роблоксианец! Большая кнопка ▲ справа — прыжок')}
+else{me.h.y=clamp(me.h.y+1,.4,40);toast('Вы снова VR-голова')}};
 // ---- цикл
 const mv=new V3(),tmp=new V3(),fa=rgb(0xeadfc4),fb=rgb(0xd3c4a1);let last=performance.now(),acc=0,acc2=0;
 const lerpA=(a,b,k)=>a+((b-a+Math.PI*3)%(Math.PI*2)-Math.PI)*k;
-function render(){gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(PM.p);camU(PM,me.h.x,me.h.y,me.h.z,me.yaw,me.pitch);
+function render(){gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(PM.p);camU(PM,cam.x,cam.y,cam.z,me.yaw,me.pitch);
 draw(gFA,0,0,0,1,fa);draw(gFB,0,0,0,1,fb);
 objs.forEach(o=>draw(geos[o.sh],o.p.x,o.p.y,o.p.z,o.s,rgb(o.c),o.f?[.1,.33,.4]:ZERO));
-{const hc=rgb(ACOL[mySk.c]||ACOL[0]);me.hand.forEach(H=>draw(gS,H.w.x,H.w.y,H.w.z,(H.g?.16:.22),hc))}
-if(peer){drawAvatar(peer.pos,peer.yaw,peer.pitch,peer.sk,1);const pc2=rgb(ACOL[peer.sk.c]||ACOL[0]);[0,1].forEach(i=>{const h=peer.hp[i];draw(gS,h.x,h.y,h.z,peer.t.g[i]?.2:.26,pc2)})}
-if(document.body.classList.contains('edit')){const d=2.4,ox=-(($('ed').offsetWidth+8)/innerWidth)*d*aspect/1.428,t=performance.now()/900;drawAvatar(new V3(ox,-.05,-d).applyYP(me.yaw,me.pitch).add(me.h),me.yaw+Math.PI+Math.sin(t)*.6,0,mySk,1.8)}
-if(dcount){gl.useProgram(PP.p);camU(PP,me.h.x,me.h.y,me.h.z,me.yaw,me.pitch);
+if(me.rb)drawRoblox(me.h,me.face,mySk,me.st,1);else{const hc=rgb(ACOL[mySk.c]||ACOL[0]);me.hand.forEach(H=>draw(gS,H.w.x,H.w.y,H.w.z,(H.g?.16:.22),hc))}
+if(peer&&peer.rb)drawRoblox(peer.pos,peer.yaw,peer.sk,peer.st,1);else if(peer){drawAvatar(peer.pos,peer.yaw,peer.pitch,peer.sk,1);const pc2=rgb(ACOL[peer.sk.c]||ACOL[0]);[0,1].forEach(i=>{const h=peer.hp[i];draw(gS,h.x,h.y,h.z,peer.t.g[i]?.2:.26,pc2)})}
+if(document.body.classList.contains('edit')){const d=2.4,ox=-(($('ed').offsetWidth+8)/innerWidth)*d*aspect/1.428,t=performance.now()/900;{const pv=new V3(ox,me.rb?-.55:-.05,-d).applyYP(me.yaw,me.pitch).add(cam),ry=me.yaw+Math.PI+Math.sin(t)*.6;if(me.rb)drawRoblox(pv,ry,mySk,0,2.6);else drawAvatar(pv,ry,0,mySk,1.8)}}
+if(dcount){gl.useProgram(PP.p);camU(PP,cam.x,cam.y,cam.z,me.yaw,me.pitch);
 gl.bindBuffer(gl.ARRAY_BUFFER,pbuf);gl.bufferSubData(gl.ARRAY_BUFFER,0,Dp.subarray(0,dcount*3));gl.vertexAttribPointer(0,3,gl.FLOAT,false,0,0);
 gl.bindBuffer(gl.ARRAY_BUFFER,cbuf);gl.vertexAttribPointer(1,3,gl.FLOAT,false,0,0);gl.drawArrays(gl.POINTS,0,dcount)}}
 function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/1000,.05)||.016;last=now;
-const sy=Math.sin(me.yaw),cy=Math.cos(me.yaw);mv.set(sy*jv.y+cy*jv.x,0,cy*jv.y-sy*jv.x).multiplyScalar(6*dt);me.h.add(mv);me.h.y=clamp(me.h.y+me.fly*4*dt,.4,40);
+const sy=Math.sin(me.yaw),cy=Math.cos(me.yaw);mv.set(sy*jv.y+cy*jv.x,0,cy*jv.y-sy*jv.x).multiplyScalar(6*dt);if(!me.rb){me.h.add(mv);me.h.y=clamp(me.h.y+me.fly*4*dt,.4,40)}
 if(me.pull&&now-me.pull.t<300)me.h.lerp(me.pull.p,.3);
 me.hand.forEach(H=>{H.pw.copy(H.w);H.w.set(H.ox,H.oy,-me.arm).applyYP(me.yaw,me.pitch).add(me.h);if(H.w.y<.08)H.w.y=.08;tmp.subVectors(H.w,H.pw).divideScalar(dt);H.vel.lerp(tmp,.3);
 if(H.held==='P'){if(!peer)release(H);else H.pt=H.w.clone().add(H.off)}
@@ -272,9 +339,10 @@ for(let k=0;k<2;k++)objs.forEach(o=>{if(o.par){const q=objs.get(o.par);if(q)o.p.
 objs.forEach(o=>{if(o.held||o.par)return;if(o.own!==myId){o.p.lerp(o.tp,.35);return}if(o.f)return;
 o.v.y-=14*dt;o.p.addScaledVector(o.v,dt);const e=o.s*.5;if(o.p.y<e){o.p.y=e;if(o.v.y<0)o.v.y*=-.3;if(Math.abs(o.v.y)<.6)o.v.y=0;o.v.x*=.92;o.v.z*=.92}else o.v.multiplyScalar(1-.2*dt)});
 for(let i=0;i<dcount;i++)if(D[i]&&D[i].o)setDot(i);
-if(peer){const t=peer.t;peer.pos.lerp(t.h,.4);peer.yaw=lerpA(peer.yaw,t.y,.4);peer.pitch=t.pi;peer.hp[0].lerp(t.l[0],.4);peer.hp[1].lerp(t.l[1],.4)}
+if(peer){const t=peer.t;peer.rb=t.r>0;peer.st=Math.max(0,t.r-1);peer.pos.lerp(t.h,.4);peer.yaw=lerpA(peer.yaw,t.y,.4);peer.pitch=t.pi;peer.hp[0].lerp(t.l[0],.4);peer.hp[1].lerp(t.l[1],.4)}
+if(me.rb)rbUpdate(dt,now);else cam.copy(me.h);
 acc+=dt;acc2+=dt;
-if(acc>.05&&dc&&dc.readyState==='open'){acc=0;send({t:'p',h:me.h.toArray().map(r3),y:r3(me.yaw),pi:r3(me.pitch),l:me.hand.map(H=>H.w.toArray().map(r3)),g:me.hand.map(H=>H.g?1:0)});
+if(acc>.05&&dc&&dc.readyState==='open'){acc=0;send({t:'p',h:me.h.toArray().map(r3),y:r3(me.rb?me.face:me.yaw),pi:r3(me.pitch),r:me.rb?1+me.st:0,l:me.hand.map(H=>H.w.toArray().map(r3)),g:me.hand.map(H=>H.g?1:0)});
 me.hand.forEach(H=>{if(H.held==='P'&&H.pt)send({t:'pull',p:H.pt.toArray().map(r3)})})}
 if(acc2>.1){acc2=0;if(dc&&dc.readyState==='open'){const l=[];objs.forEach(o=>{if(o.own!==myId)return;if(o.dirty||o.p.distanceToSquared(o.lp)>1e-6){o.dirty=false;o.lp.copy(o.p);l.push({i:o.id,sh:o.sh,c:o.c,s:r3(o.s),p:o.p.toArray().map(r3),f:o.f,a:o.par,q:o.off.toArray().map(r3),w:o.own})}});if(l.length)send({t:'o',l})}}
 me.hand.forEach((H,i)=>{if(!H.cm)return;const f=1.428,x=(H.ox*f/aspect/me.arm+1)/2*innerWidth+(i?58:-58),y=(1-H.oy*f/me.arm)/2*innerHeight+66;$('c'+i).style.transform='translate('+(clamp(x,40,innerWidth-40)-36)+'px,'+(clamp(y,70,innerHeight-40)-36)+'px)'});
