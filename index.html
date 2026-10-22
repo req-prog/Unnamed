@@ -183,16 +183,20 @@ const ICE={iceServers:[
 // Браузеры прячут локальные адреса за «xxxx.local» (mDNS), а через Tailscale mDNS не ходит —
 // поэтому подставляем в код свой Tailscale-IP рядом с каждым такими кандидатом (порт тот же).
 const IP_RE=/^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
-function readTS(){const v=$('ts').value.trim();try{localStorage.setItem('vi_ts',v)}catch(_){}if(!v)return'';if(!IP_RE.test(v)){toast('Неверный IP, пример: 100.101.102.103');return null}return v}
-function withTS(d,ip){if(!ip)return d;const out=[];let n=0;
-d.sdp.split(/\r?\n/).forEach(l=>{out.push(l);const m=/^a=candidate:(\S+) (\d+) udp (\d+) (\S+\.local) (\d+) typ host(.*)$/i.exec(l);
-if(m){n++;out.push('a=candidate:ts'+m[1]+' '+m[2]+' udp '+(+m[3]+1)+' '+ip+' '+m[5]+' typ host'+m[6])}});
+function readTS(){const v=$('ts').value.replace(/,/g,'.').replace(/\s+/g,'');$('ts').value=v;try{localStorage.setItem('vi_ts',v)}catch(_){}if(!v)return'';if(!IP_RE.test(v)){toast('Неверный IP, пример: 100.101.102.103');return null}
+const a=v.split('.').map(Number);if(!(a[0]===100&&a[1]>=64&&a[1]<=127))toast('Похоже, это не Tailscale-адрес (он вида 100.x.x.x). Впишите СВОЙ IP из приложения Tailscale');return v}
+let tsMsg='';
+function withTS(d,ip){tsMsg=ip?'':'Tailscale IP не указан — через Tailscale не подключится';if(!ip)return d;const out=[],seen=new Set();let n=0;
+d.sdp.split(/\r?\n/).forEach(l=>{out.push(l);const m=/^a=candidate:(\S+) (\d+) udp (\d+) (\S+) (\d+) typ host(.*)$/i.exec(l);
+if(m&&m[4]!==ip&&m[4].indexOf(':')<0&&!seen.has(m[5])){seen.add(m[5]);n++;out.push('a=candidate:ts'+m[1]+' '+m[2]+' udp '+(+m[3]+1)+' '+ip+' '+m[5]+' typ host'+m[6])}});
+tsMsg=n?'Tailscale: добавлено адресов '+n+' ('+ip+')':'Tailscale: в коде нет локальных адресов, IP не добавлен';
 return n?{type:d.type,sdp:out.join('\r\n')}:{type:d.type,sdp:d.sdp}}
+function watch(){const p=pc;setTimeout(()=>{if(p!==pc||(dc&&dc.readyState==='open'))return;stat();$('mps').textContent+='\nНет соединения за 20 с. Проверьте: у обоих включён Tailscale, каждый вписал СВОЙ IP до создания кода, коды вставлены целиком и созданы заново.'},20000)}
 function gather(){return new Promise(r=>{if(pc.iceGatheringState==='complete')return r();const p=pc;p.onicegatheringstatechange=()=>p.iceGatheringState==='complete'&&r();setTimeout(r,6000)})}
 const cand={host:0,srflx:0,relay:0};
 function stat(){if(!pc)return;const cs=pc.connectionState||pc.iceConnectionState,ic=pc.iceConnectionState;
 let t='Соединение: '+cs+' · ICE: '+ic+' · кандидаты: host '+cand.host+', srflx '+cand.srflx+', relay '+cand.relay;
-if(cs==='failed'||ic==='failed')t+='\nНе удалось соединиться. Оба впишите Tailscale IP и создайте коды заново.';
+if(tsMsg)t=tsMsg+'\n'+t;if(cs==='failed'||ic==='failed')t+='\nНе удалось соединиться. Оба впишите Tailscale IP и создайте коды заново.';
 $('mps').textContent=t;$('mps').style.whiteSpace='pre-line'}
 function setup(host){if(pc){try{pc.close()}catch(_){}}cand.host=cand.srflx=cand.relay=0;const p=pc=new RTCPeerConnection(ICE);
 p.onicecandidate=e=>{if(p!==pc||!e.candidate)return;const t=e.candidate.type||(/ typ (\w+)/.exec(e.candidate.candidate)||[])[1];if(t in cand)cand[t]++};
@@ -209,11 +213,11 @@ function drop(){if(!peer)return;peer=null;me.hand.forEach(H=>{if(H.held==='P'){H
 let role=null;try{$('ts').value=localStorage.getItem('vi_ts')||''}catch(_){}
 function panel(t){$('mp').style.display='block';$('mpt').textContent=t;$('out').value='';$('inp').value='';$('mps').textContent=''}
 $('host').onclick=async()=>{const ip=readTS();if(ip===null)return;role='host';myId='H';panel('1. Скопируйте код и отправьте другу. 2. Вставьте его ответ ниже и нажмите «Подключить».');$('go').textContent='Подключить';
-try{setup(true);const o=await pc.createOffer();await pc.setLocalDescription(o);await gather();$('out').value=JSON.stringify(withTS(pc.localDescription,ip))}catch(e){$('mps').textContent='Ошибка: '+e.message}};
+try{setup(true);const o=await pc.createOffer();await pc.setLocalDescription(o);await gather();$('out').value=JSON.stringify(withTS(pc.localDescription,ip));stat()}catch(e){$('mps').textContent='Ошибка: '+e.message}};
 $('join').onclick=()=>{const ip=readTS();if(ip===null)return;role='join';myId='G';me.h.set(0,1.6,3);panel('1. Вставьте код друга и нажмите «Создать ответ». 2. Отправьте полученный код другу.');$('go').textContent='Создать ответ';try{setup(false)}catch(e){$('mps').textContent='Ошибка: '+e.message}};
 $('go').onclick=async()=>{let d;try{d=JSON.parse($('inp').value.trim())}catch(_){$('mps').textContent='Неверный код. Скопируйте его целиком.';return}
 const ip=readTS();if(ip===null)return;
-try{if(role==='host')await pc.setRemoteDescription(d);else{await pc.setRemoteDescription(d);const a=await pc.createAnswer();await pc.setLocalDescription(a);$('mps').textContent='Собираю адреса…';await gather();$('out').value=JSON.stringify(withTS(pc.localDescription,ip));stat()}}catch(e){$('mps').textContent='Ошибка: '+e.message}};
+try{if(role==='host'){await pc.setRemoteDescription(d);stat();watch()}else{await pc.setRemoteDescription(d);const a=await pc.createAnswer();await pc.setLocalDescription(a);$('mps').textContent='Собираю адреса…';await gather();$('out').value=JSON.stringify(withTS(pc.localDescription,ip));stat();watch()}}catch(e){$('mps').textContent='Ошибка: '+e.message}};
 $('cp').onclick=()=>{$('out').select();try{document.execCommand('copy');toast('Код скопирован')}catch(_){}};
 // ---- скины
 const ACOL=[0x7a5cff,0xff5a5a,0xff9a3d,0xffd23d,0x3dbb8a,0x3d8bff,0xff7eb6,0xf2f2f2,0x333333];
