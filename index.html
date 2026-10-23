@@ -18,14 +18,24 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .hb{width:84px;height:84px;border-radius:50%;font-size:26px;touch-action:none}
 #c0,#c1{position:fixed;left:0;top:0;width:72px;height:72px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:22px;background:color-mix(in srgb,var(--ac) 28%,transparent);box-shadow:inset 0 0 0 3px var(--ac);color:var(--tx);touch-action:none;will-change:transform}
 .hb.cm{box-shadow:0 0 0 3px var(--ac)}
-#ed{position:fixed;right:calc(8px + env(safe-area-inset-right,0px));top:calc(64px + env(safe-area-inset-top,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(48vw,290px);display:none;background:var(--ui);border-radius:18px;padding:10px;overflow:auto;touch-action:pan-y;box-sizing:border-box;box-shadow:0 3px 0 var(--ln)}
-#ed .eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-#ed .el{font-size:13px;opacity:.7;margin:10px 0 6px}
+#ed,#be{position:fixed;right:calc(8px + env(safe-area-inset-right,0px));top:calc(64px + env(safe-area-inset-top,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(48vw,290px);display:none;background:var(--ui);border-radius:18px;padding:10px;overflow:auto;touch-action:pan-y;box-sizing:border-box;box-shadow:0 3px 0 var(--ln)}
+#ed .eh,#be .eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+#ed .el,#be .el{font-size:13px;opacity:.7;margin:10px 0 6px}
 .eg{display:flex;flex-wrap:wrap;gap:6px}
 .ch{border:0;border-radius:10px;padding:8px 9px;font:inherit;font-size:13px;background:transparent;color:var(--tx);box-shadow:inset 0 0 0 2px var(--ln)}
 .ch.on{background:var(--ac);color:#fff;box-shadow:none}
 .sw{width:38px;height:38px;border-radius:50%;border:0;box-shadow:inset 0 0 0 2px var(--ln)}
 .sw.on{box-shadow:0 0 0 3px var(--ac)}
+#be input[type=range]{width:100%;margin:2px 0;accent-color:var(--ac)}
+#emo{display:none}body.rb #emo{display:inline-block}
+.fl{position:fixed;right:calc(8px + env(safe-area-inset-right,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(56vw,236px);display:none;background:var(--ui);border-radius:18px;padding:10px;box-sizing:border-box;box-shadow:0 3px 0 var(--ln);max-height:calc(100% - 80px);overflow:auto;touch-action:pan-y}
+.fl .eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.fl .el{font-size:13px;opacity:.85;margin:6px 0}
+.fl .b{width:100%;margin-top:6px;font-size:15px}.fl .eh .b,.fl .gr .b{width:auto;margin:0}
+.gr{display:flex;align-items:center;gap:6px;margin:5px 0}.gr span{width:34px;font-weight:700}.gr .b{min-width:46px;height:40px}.gr .gv{flex:1;text-align:center;font-size:13px}
+.b:disabled{opacity:.45}
+body.m-gz #gzp,body.m-sv #svp,body.m-pl #plp,body.m-cp #cpp{display:block}
+body.mm #hands,body.mm #arm,body.mm .circ,body.mm #jmp{display:none!important}
 body.rb #fly{display:none!important}
 #jmp{position:fixed;right:calc(22px + env(safe-area-inset-right,0px));bottom:calc(30px + env(safe-area-inset-bottom,0px));width:120px;height:120px;border-radius:50%;font-size:44px;display:none;touch-action:none}
 body.rb #jmp{display:block}body.edit #jmp{display:none!important}
@@ -49,7 +59,7 @@ input.ip{width:100%;box-sizing:border-box;height:40px;margin-top:6px;border-radi
 <button class="b" id="fs" title="Полный экран">⛶</button><button class="b" id="mn" title="Меню">☰</button>
 <button class="b" id="pen" title="Рисовать">✏️</button><button class="b" id="col" title="Цвет">●</button>
 <button class="b" id="frz" title="Заморозить">❄</button><button class="b" id="big" title="Больше">⤢</button><button class="b" id="sml" title="Меньше">⤡</button>
-<button class="b" id="wld" title="Склеить">🔗</button><button class="b" id="spw" title="Создать предмет">🧱</button><button class="b" id="rbt" title="Роблоксианец">🧍</button><button class="b" id="sk" title="Скин">🎨</button>
+<button class="b" id="wld" title="Склеить">🔗</button><button class="b" id="spw" title="Создать предмет">🧱</button><button class="b" id="rbt" title="Роблоксианец">🧍</button><button class="b" id="sk" title="Скин">🎨</button><button class="b" id="bk" title="Редактор блоков">🛠</button><button class="b" id="emo" title="Эмоция">😐</button>
 </div>
 <div id="joy"><div id="knob"></div></div>
 <div id="fly"><button class="b" id="up">▲</button><button class="b" id="dn">▼</button></div>
@@ -57,7 +67,13 @@ input.ip{width:100%;box-sizing:border-box;height:40px;margin-top:6px;border-radi
 <button class="b" id="jmp">▲</button>
 <div id="hands"><button class="b hb" data-i="0">Л</button><button class="b hb" data-i="1">П</button></div>
 <div id="c0" class="circ" data-i="0">Л</div><div id="c1" class="circ" data-i="1">П</div>
-<div id="ed"><div class="eh"><b>Скин</b><button class="b" id="edx">✕</button></div><div class="el">Цвет</div><div class="eg" id="gc"></div><div class="el">Глаза</div><div class="eg" id="ge"></div><div class="el">Аксессуар</div><div class="eg" id="ga"></div></div>
+<div id="ed"><div class="eh"><b>Скин</b><button class="b" id="edx">✕</button></div><div class="el">Цвет</div><div class="eg" id="gc"></div><div class="el">Глаза</div><div class="eg" id="ge"></div><div class="el">Аксессуар</div><div class="eg" id="ga"></div><div class="el">Эмоция роблоксианца</div><div class="eg" id="gm"></div></div>
+<div id="be"><div class="eh"><b>Редактор блоков</b><button class="b" id="bex">✕</button></div><div class="el">Блок</div><div class="eg" id="bs"></div><div class="el">Размер: <span id="bsv">1.0</span></div><input type="range" id="bsz" min="0.3" max="6" step="0.1" value="1"><div class="el">Цвет</div><div class="eg" id="bc"></div><button class="b" id="bput" style="width:100%;margin-top:14px;font-size:16px;background:var(--ac);color:#fff">Поставить блок</button><button class="b" id="bclr" style="width:100%;margin-top:8px;font-size:16px">🧹 Очистить карту</button><div class="el">Инструменты</div><button class="b" id="bgz" style="width:100%;font-size:15px">⇔ Gizmo — растянуть блок по X, Y, Z</button><button class="b" id="bcp" style="width:100%;margin-top:8px;font-size:15px">📋 Копировать блок (с растяжкой)</button><button class="b" id="bpaste" style="width:100%;margin-top:8px;font-size:15px">📌 Вставить копию</button><button class="b" id="bsave" style="width:100%;margin-top:8px;font-size:15px">💾 Сохранить постройку в файл</button><button class="b" id="bload" style="width:100%;margin-top:8px;font-size:15px">📂 Вставить постройку из файла</button></div>
+<div class="fl" id="gzp"><div class="eh"><b>Gizmo</b><button class="b" id="gzx">✕</button></div><div class="el" id="gzs">Тапните по блоку</div><div id="gzr"></div></div>
+<div class="fl" id="svp"><div class="eh"><b>Сохранить постройку</b><button class="b" id="svx">✕</button></div><div class="el" id="svs"></div><button class="b" id="svall">Вся карта</button><button class="b" id="svgo" style="background:var(--ac);color:#fff">💾 Сохранить в файл</button></div>
+<div class="fl" id="plp"><div class="eh"><b>Вставить постройку</b><button class="b" id="plx">✕</button></div><div class="el" id="pls"></div><button class="b" id="plgo" style="background:var(--ac);color:#fff">Поставить здесь</button></div>
+<div class="fl" id="cpp"><div class="eh"><b>Копировать</b><button class="b" id="cpx">✕</button></div><div class="el" id="cps">Тапните по блоку</div><button class="b" id="cpgo" style="background:var(--ac);color:#fff" disabled>📋 Копировать и поставить</button></div>
+<input type="file" id="fi" accept=".json,application/json" style="display:none">
 <div id="toast"></div>
 <div id="menu"><div class="panel">
 <h1>VIAER</h1>
@@ -75,7 +91,7 @@ input.ip{width:100%;box-sizing:border-box;height:40px;margin-top:6px;border-radi
 <button class="b" id="go"></button>
 <p id="mps"></p>
 </div>
-<p><b>Управление.</b> Левый джойстик — лететь, ▲▼ — вверх и вниз. Тяните по экрану — смотреть. Нажмите Л или П — рядом с рукой появится кружок (его видите только вы). Ведите кружок пальцем — рука двигается за ним, короткий тап по кружку — схватить или отпустить. Ещё раз Л/П — убрать кружок. Ползунок внизу — длина руки. Включённый ✏️ и зажатый кружок — рука рисует. 🎨 — редактор скина: цвет, глаза и аксессуары. 🧍 — превратиться в маленького роблоксианца (размером с руку): он не проходит сквозь блоки, прыгает большой кнопкой ▲ справа, стоит на руках и голове VR-игроков. VR-игрок может взять роблоксианца рукой (тап по кружку рядом с ним).</p>
+<p><b>Управление.</b> Левый джойстик — лететь, ▲▼ — вверх и вниз. Тяните по экрану — смотреть. Нажмите Л или П — рядом с рукой появится кружок (его видите только вы). Ведите кружок пальцем — рука двигается за ним, короткий тап по кружку — схватить или отпустить. Ещё раз Л/П — убрать кружок. Ползунок внизу — длина руки. Включённый ✏️ и зажатый кружок — рука рисует. 🎨 — редактор скина: цвет, глаза и аксессуары. 🧍 — превратиться в маленького роблоксианца (размером с руку): он не проходит сквозь блоки, прыгает большой кнопкой ▲ справа, стоит на руках и голове VR-игроков. VR-игрок может взять роблоксианца рукой (тап по кружку рядом с ним). 🛠 — редактор блоков: выберите форму, размер и цвет и нажмите «Поставить блок»; кнопка «Очистить карту» убирает все блоки. Там же: Gizmo — выберите блок и растяните его по X, Y, Z; «Сохранить постройку» — отметьте область на земле и скачайте файл; «Вставить постройку» — загрузите файл и выберите место. «Копировать блок» — тапните по блоку (растянутому тоже), затем выберите место и «Поставить здесь»; «Вставить копию» ставит скопированное снова. В режиме роблоксианца кнопка с лицом (😐) переключает эмоции: радость, грусть, злость, удивление, любовь.</p>
 </div></div>
 <script>
 function showErr(t){const d=document.createElement('div');d.style.cssText='position:fixed;left:8px;right:8px;top:8px;z-index:99;background:#b00020;color:#fff;padding:10px;border-radius:8px;font:13px monospace;user-select:text';d.textContent=t;document.body.appendChild(d)}
@@ -130,20 +146,21 @@ const pbuf=gl.createBuffer(),cbuf=gl.createBuffer();[pbuf,cbuf].forEach(b=>{gl.b
 const toast=t=>{const e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,1500)};
 let myId='H',peer=null,dc=null,pc=null;
 // ---- объекты
-const cols=[0xff6b4a,0xffc23d,0x3dbb8a,0x3d8bff,0xa66bff,0xff7eb6];
+const EXTRA=[0x22d3ee,0xa3e635,0x8b5a2b,0x1e3a8a,0x9f1239,0x6ee7b7,0xc4b5fd,0xfdba74,0x9ca3af,0x0f766e]; // +10 новых цветов
+const cols=[0xff6b4a,0xffc23d,0x3dbb8a,0x3d8bff,0xa66bff,0xff7eb6,...EXTRA];
 const objs=new Map();let seq=0;
-function mk(id,sh,c,s,p,own){const o={id,sh,c,s,p:new V3(p[0],p[1],p[2]),tp:new V3(p[0],p[1],p[2]),v:new V3(),f:false,par:null,off:new V3(),own:own||'H',held:false,dirty:false,lp:new V3(1e9,0,0)};objs.set(id,o);return o}
+function mk(id,sh,c,s,p,own){const o={id,sh,c,s,k:[1,1,1],p:new V3(p[0],p[1],p[2]),tp:new V3(p[0],p[1],p[2]),v:new V3(),f:false,par:null,off:new V3(),own:own||'H',held:false,dirty:false,lp:new V3(1e9,0,0)};objs.set(id,o);return o}
 for(let i=0;i<14;i++){const sh=Math.floor(rnd()*4),c=cols[Math.floor(rnd()*6)],s=.6+rnd()*1;let x=(rnd()-.5)*24,z=(rnd()-.5)*24;if(Math.abs(x)<2)x+=4;mk('i'+i,sh,c,s,[x,s*.5,z])}
-function setDot(i){const d=D[i];if(d.o){const o=objs.get(d.o);if(!o)return;const k=o.s/d.s0;Dp[i*3]=o.p.x+d.l.x*k;Dp[i*3+1]=o.p.y+d.l.y*k;Dp[i*3+2]=o.p.z+d.l.z*k}else{Dp[i*3]=d.l.x;Dp[i*3+1]=d.l.y;Dp[i*3+2]=d.l.z}}
-function addDot(c,pid,loc,s0){const i=dn%MAXD;dn++;D[i]={o:pid,l:loc,s0};const h=rgb(parseInt(c.slice(1),16));Dc.set(h,i*3);gl.bindBuffer(gl.ARRAY_BUFFER,cbuf);gl.bufferSubData(gl.ARRAY_BUFFER,i*12,Dc.subarray(i*3,i*3+3));dcount=Math.min(dn,MAXD);setDot(i)}
+function setDot(i){const d=D[i];if(d.o){const o=objs.get(d.o);if(!o){Dp[i*3+1]=-1e4;return}const k=o.s/d.s0,q=d.k;Dp[i*3]=o.p.x+d.l.x*k*o.k[0]/q[0];Dp[i*3+1]=o.p.y+d.l.y*k*o.k[1]/q[1];Dp[i*3+2]=o.p.z+d.l.z*k*o.k[2]/q[2]}else{Dp[i*3]=d.l.x;Dp[i*3+1]=d.l.y;Dp[i*3+2]=d.l.z}}
+function addDot(c,pid,loc,s0,k0){const i=dn%MAXD;dn++;D[i]={o:pid,l:loc,s0,k:k0||[1,1,1],c};const h=rgb(parseInt(c.slice(1),16));Dc.set(h,i*3);gl.bindBuffer(gl.ARRAY_BUFFER,cbuf);gl.bufferSubData(gl.ARRAY_BUFFER,i*12,Dc.subarray(i*3,i*3+3));dcount=Math.min(dn,MAXD);setDot(i)}
 const skin=rgb(0xffd1b3),violet=rgb(0x7a5cff),white=[1,1,1],black=[.07,.07,.07];
-function makePeer(){return{sk:{c:0,e:0,a:0},pos:new V3(0,1.6,3),yaw:0,pitch:0,rb:false,st:0,hp:[new V3(),new V3()],t:{r:0,h:new V3(0,1.6,3),y:0,pi:0,l:[new V3(),new V3()],g:[0,0]}}}
+function makePeer(){return{sk:{c:0,e:0,a:0,m:0},pos:new V3(0,1.6,3),yaw:0,pitch:0,rb:false,st:0,hp:[new V3(),new V3()],t:{r:0,h:new V3(0,1.6,3),y:0,pi:0,l:[new V3(),new V3()],g:[0,0]}}}
 const me={rb:false,vy:0,cl:false,gr:false,face:0,st:0,jh:false,sup:null,supP:new V3(),wn:new V3(),h:new V3(0,1.6,0),yaw:0,pitch:0,arm:1.1,pull:null,pen:false,ci:0,fly:0,hand:[0,1].map(i=>({ox:i?.45:-.45,oy:-.25,g:false,held:null,off:new V3(),w:new V3(),pw:new V3(),vel:new V3(),down:false,cm:false,last:new V3(1e9,0,0)}))};
-const cam=new V3(0,1.6,0);const pal=['#ff6b4a','#ffc23d','#3dbb8a','#3d8bff','#a66bff','#222222'];
+const cam=new V3(0,1.6,0);const pal=['#ff6b4a','#ffc23d','#3dbb8a','#3d8bff','#a66bff','#222222',...EXTRA.map(h=>'#'+h.toString(16).padStart(6,'0'))];
 const heldObj=()=>{for(const H of me.hand)if(H.held&&H.held!=='P')return objs.get(H.held)};
 function updUI(){document.querySelectorAll('.hb').forEach(e=>{const H=me.hand[+e.dataset.i];e.classList.toggle('on',H.g);e.classList.toggle('cm',H.cm)});$('pen').classList.toggle('on',me.pen);$('col').style.color=pal[me.ci]}
 function release(H){if(H.held&&H.held!=='P'){const o=objs.get(H.held);if(o){o.held=false;o.dirty=true;if(o.f)o.v.set(0,0,0);else o.v.copy(H.vel).clampLength(0,15)}}H.held=null;H.g=false;updUI()}
-function grab(H){let b=null,bd=1e9;objs.forEach(o=>{if(o.held)return;const d=o.p.distanceTo(H.w)-o.s*.5;if(d<.5&&d<bd){bd=d;b=o}});
+function grab(H){let b=null,bd=1e9;objs.forEach(o=>{if(o.held)return;const d=dAB(o,H.w);if(d<.5&&d<bd){bd=d;b=o}});
 H.g=true;if(b){b.par=null;b.held=true;b.own=myId;b.dirty=true;H.held=b.id;H.off.copy(b.p).sub(H.w)}
 else if(peer&&(peer.rb?peerC().distanceTo(H.w)<.6:peer.pos.distanceTo(H.w)<.9)){H.held='P';H.off.copy(peer.pos).sub(H.w)}updUI()}
 // ---- ввод
@@ -151,9 +168,9 @@ let jid=null;const jv={x:0,y:0},J=$('joy'),K=$('knob');
 function jm(e){const r=J.getBoundingClientRect();let x=(e.clientX-r.left-r.width/2)/(r.width/2),y=(e.clientY-r.top-r.height/2)/(r.height/2);const l=Math.hypot(x,y);if(l>1){x/=l;y/=l}jv.x=x;jv.y=y;K.style.transform=`translate(${x*35}px,${y*35}px)`}
 J.onpointerdown=e=>{jid=e.pointerId;J.setPointerCapture(jid);jm(e)};J.onpointermove=e=>{if(e.pointerId===jid)jm(e)};
 J.onpointerup=J.onpointercancel=()=>{jid=null;jv.x=jv.y=0;K.style.transform=''};
-let lk=null;cv.onpointerdown=e=>{if(!lk){lk={id:e.pointerId,x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId)}};
-cv.onpointermove=e=>{if(lk&&lk.id===e.pointerId){me.yaw-=(e.clientX-lk.x)*.005;me.pitch=clamp(me.pitch-(e.clientY-lk.y)*.005,-1.4,1.4);lk.x=e.clientX;lk.y=e.clientY}};
-cv.onpointerup=cv.onpointercancel=e=>{if(lk&&lk.id===e.pointerId)lk=null};
+let lk=null,gzd=null;cv.onpointerdown=e=>{if(MODE==='gz'&&gzStart(e)){cv.setPointerCapture(e.pointerId);return}if(!lk){lk={id:e.pointerId,x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY,t:performance.now()};cv.setPointerCapture(e.pointerId)}};
+cv.onpointermove=e=>{if(gzd&&gzd.id===e.pointerId){gzMove(e);return}if(lk&&lk.id===e.pointerId){me.yaw-=(e.clientX-lk.x)*.005;me.pitch=clamp(me.pitch-(e.clientY-lk.y)*.005,-1.4,1.4);lk.x=e.clientX;lk.y=e.clientY}};
+cv.onpointerup=cv.onpointercancel=e=>{if(gzd&&gzd.id===e.pointerId){gzd=null;return}if(lk&&lk.id===e.pointerId){if(e.type==='pointerup'&&MODE&&Math.hypot(e.clientX-lk.sx,e.clientY-lk.sy)<12&&performance.now()-lk.t<450)onTap(e.clientX,e.clientY);lk=null}};
 document.querySelectorAll('.hb').forEach(el=>{const H=me.hand[+el.dataset.i];let st=null;
 el.onpointerdown=e=>{el.setPointerCapture(e.pointerId);st={id:e.pointerId,x:e.clientX,y:e.clientY,t:performance.now(),m:0};H.down=true};
 el.onpointermove=e=>{if(!st||e.pointerId!==st.id)return;const dx=e.clientX-st.x,dy=e.clientY-st.y;st.m+=Math.abs(dx)+Math.abs(dy);st.x=e.clientX;st.y=e.clientY;H.ox=clamp(H.ox+dx*.006,-3,3);H.oy=clamp(H.oy-dy*.006,-2.2,2.2)};
@@ -172,7 +189,7 @@ function sc(k){const o=need();if(!o)return;const ns=clamp(o.s*k,.3,6),r=ns/o.s;o
 $('big').onclick=()=>sc(1.18);$('sml').onclick=()=>sc(1/1.18);
 $('wld').onclick=()=>{const o=need();if(!o)return;let b=null,bd=1e9;objs.forEach(c=>{if(c===o||c.par||o.par===c.id)return;const d=c.p.distanceTo(o.p)-(c.s+o.s)*.5;if(d<.6&&d<bd){bd=d;b=c}});
 if(b){b.par=o.id;b.off.copy(b.p).sub(o.p);b.own=myId;b.f=false;b.dirty=true;toast('Склеено')}else{let n=0;objs.forEach(c=>{if(c.par===o.id){c.par=null;c.own=myId;c.dirty=true;n++}});toast(n?'Разъединено':'Рядом нет предметов')}};
-$('spw').onclick=()=>{const p=new V3(0,0,me.rb?-3.2:-2).applyYP(me.yaw,me.pitch).add(me.rb?cam:me.h),s=.6+Math.random()*.9;const o=mk(myId+(seq++),Math.floor(Math.random()*4),cols[Math.floor(Math.random()*6)],s,[p.x,Math.max(p.y,s*.5),p.z],myId);o.dirty=true};
+$('spw').onclick=()=>{const p=new V3(0,0,me.rb?-3.2:-2).applyYP(me.yaw,me.pitch).add(me.rb?cam:me.h),s=.6+Math.random()*.9;const o=mk(myId+(seq++),Math.floor(Math.random()*4),cols[Math.floor(Math.random()*cols.length)],s,[p.x,Math.max(p.y,s*.5),p.z],myId);o.dirty=true};
 $('fs').onclick=()=>{const d=document,e=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const f=e.requestFullscreen||e.webkitRequestFullscreen;if(f){const r=f.call(e);if(r&&r.then)r.then(()=>{try{screen.orientation.lock('landscape').catch(()=>{})}catch(_){}}).catch(()=>toast('Не удалось включить полный экран'))}else toast('Этот браузер не поддерживает полный экран. Добавьте страницу на экран «Домой».')}};
 // ---- меню и сеть
 $('mn').onclick=()=>$('menu').style.display='flex';$('solo').onclick=()=>$('menu').style.display='none';
@@ -202,12 +219,14 @@ function setup(host){if(pc){try{pc.close()}catch(_){}}cand.host=cand.srflx=cand.
 p.onicecandidate=e=>{if(p!==pc||!e.candidate)return;const t=e.candidate.type||(/ typ (\w+)/.exec(e.candidate.candidate)||[])[1];if(t in cand)cand[t]++};
 p.onconnectionstatechange=p.oniceconnectionstatechange=()=>{if(p!==pc)return;stat();if(['failed','closed'].includes(p.connectionState))drop()};
 if(host){dc=p.createDataChannel('v');bind()}else p.ondatachannel=e=>{dc=e.channel;bind()}}
-function bind(){dc.onopen=()=>{peer=makePeer();$('hud').textContent='Онлайн: 2 игрока';$('menu').style.display='none';objs.forEach(o=>{if(o.own===myId)o.dirty=true});toast('Игрок подключился');send({t:'s',c:mySk.c,e:mySk.e,a:mySk.a})};
+function bind(){dc.onopen=()=>{peer=makePeer();$('hud').textContent='Онлайн: 2 игрока';$('menu').style.display='none';objs.forEach(o=>{if(o.own===myId)o.dirty=true});toast('Игрок подключился');send({t:'s',c:mySk.c,e:mySk.e,a:mySk.a,m:mySk.m})};
 dc.onclose=drop;dc.onmessage=e=>{const m=JSON.parse(e.data);
 if(m.t==='p'&&peer){const t=peer.t;t.h.set(...m.h);t.r=m.r|0;t.y=m.y;t.pi=m.pi;t.l[0].set(...m.l[0]);t.l[1].set(...m.l[1]);t.g=m.g}
-else if(m.t==='o')m.l.forEach(a=>{let o=objs.get(a.i);if(!o)o=mk(a.i,a.sh,a.c,a.s,a.p,a.w);if(a.w===myId)return;o.own=a.w;o.tp.set(...a.p);o.s=a.s;o.f=a.f;o.par=a.a;o.off.set(...a.q);o.v.set(0,0,0);if(o.held){o.held=false;me.hand.forEach(H=>{if(H.held===o.id){H.held=null;H.g=false}});updUI()}});
-else if(m.t==='s'){if(peer)peer.sk={c:m.c|0,e:m.e|0,a:m.a|0}}
-else if(m.t==='d')addDot(m.c,m.o,new V3(...m.p),m.s);
+else if(m.t==='clr')clearMap(true);
+else if(m.t==='o'&&performance.now()>noO)m.l.forEach(a=>{let o=objs.get(a.i);if(!o)o=mk(a.i,a.sh,a.c,a.s,a.p,a.w);if(a.w===myId)return;o.own=a.w;o.c=a.c;o.sh=a.sh;o.tp.set(...a.p);o.s=a.s;if(a.k)o.k=a.k.slice();o.f=a.f;o.par=a.a;o.off.set(...a.q);o.v.set(0,0,0);if(o.held){o.held=false;me.hand.forEach(H=>{if(H.held===o.id){H.held=null;H.g=false}});updUI()}});
+else if(m.t==='s'){if(peer)peer.sk={c:m.c|0,e:m.e|0,a:m.a|0,m:m.m|0}}
+else if(m.t==='d')addDot(m.c,m.o,new V3(...m.p),m.s,m.k);
+else if(m.t==='D')m.l.forEach(d=>addDot(d.c,d.o,new V3(...d.p),d.s,d.k));
 else if(m.t==='pull')me.pull={p:new V3(...m.p),t:performance.now()}}}
 function drop(){if(!peer)return;peer=null;me.hand.forEach(H=>{if(H.held==='P'){H.held=null;H.g=false}});updUI();$('hud').textContent='Одиночная игра';toast('Игрок отключился')}
 let role=null;try{$('ts').value=localStorage.getItem('vi_ts')||''}catch(_){}
@@ -220,10 +239,11 @@ const ip=readTS();if(ip===null)return;
 try{if(role==='host'){await pc.setRemoteDescription(d);stat();watch()}else{await pc.setRemoteDescription(d);const a=await pc.createAnswer();await pc.setLocalDescription(a);$('mps').textContent='Собираю адреса…';await gather();$('out').value=JSON.stringify(withTS(pc.localDescription,ip));stat();watch()}}catch(e){$('mps').textContent='Ошибка: '+e.message}};
 $('cp').onclick=()=>{$('out').select();try{document.execCommand('copy');toast('Код скопирован')}catch(_){}};
 // ---- скины
-const ACOL=[0x7a5cff,0xff5a5a,0xff9a3d,0xffd23d,0x3dbb8a,0x3d8bff,0xff7eb6,0xf2f2f2,0x333333];
+const ACOL=[0x7a5cff,0xff5a5a,0xff9a3d,0xffd23d,0x3dbb8a,0x3d8bff,0xff7eb6,0xf2f2f2,0x333333,...EXTRA];
 const EYE=['Обычные','Милые','Точки','Большие','Сердечки','Сонные','Синие','Золотые','Кошачьи','Циклоп'];
-const ACC=['Нет','Цилиндр','Колпак','Корона','Ушки','Рожки','Антенна','Очки','Нимб','Усы','Шапочка'];
-let mySk={c:0,e:0,a:0};try{const q=JSON.parse(localStorage.getItem('vi_sk')||'null');if(q)mySk={c:(q.c|0)%ACOL.length,e:(q.e|0)%EYE.length,a:(q.a|0)%ACC.length}}catch(_){}
+const ACC=['Нет','Цилиндр','Колпак','Корона','Ушки','Рожки','Антенна','Очки','Нимб','Усы','Шапочка','Бантик','Повязка','Шлем','Кепка','Наушники','Цветок','Рог единорога','Крылышки','Борода','Звезда'];
+const EMO=['Нет','😀 Радость','😢 Грусть','😠 Злость','😮 Удивление','😍 Любовь'],EMJ=['😐','😀','😢','😠','😮','😍'];
+let mySk={c:0,e:0,a:0,m:0};try{const q=JSON.parse(localStorage.getItem('vi_sk')||'null');if(q)mySk={c:(q.c|0)%ACOL.length,e:(q.e|0)%EYE.length,a:(q.a|0)%ACC.length,m:0}}catch(_){}
 function drawAvatar(p,yaw,pi,sk,k){
 const col=rgb(ACOL[sk.c]||ACOL[0]);draw(gS,p.x,p.y,p.z,.6*k,col,null,yaw,pi);
 const part=(g,x,y,z,s,c,em,fl)=>{const q=new V3(x*k,y*k,z*k).applyYP(yaw,pi).add(p);draw(g,q.x,q.y,q.z,Array.isArray(s)?s.map(v=>v*k):s*k,c,em,yaw,fl?pi+Math.PI:pi)};
@@ -239,47 +259,187 @@ case 6:part(sp,x,.05,-.25,.2,W);part(sp,x,.05,-.3,.12,blue);part(sp,x,.05,-.335,
 case 7:part(sp,x,.05,-.26,.18,gold,[.25,.2,0]);part(sp,x+.03,.09,-.33,.05,W);break;
 case 8:part(sp,x,.05,-.255,.19,rgb(0x7be36b));part(sp,x,.05,-.345,[.03,.15,.03],B);break;
 default:part(sp,x,.05,-.24,.17,W);part(sp,x,.05,-.31,.08,B)}});
-switch(sk.a){
-case 1:part(cy,0,.25,0,[.76,.04,.76],B);part(cy,0,.4,0,[.5,.3,.5],B);part(cy,0,.31,0,[.52,.06,.52],red);break;
-case 2:part(cn,0,.45,0,[.5,.5,.5],rgb(0xa66bff));part(sp,0,.72,0,.12,pink);break;
-case 3:part(cy,0,.27,0,[.56,.1,.56],gold);for(let i=0;i<5;i++){const t=i/5*6.2832;part(cn,Math.cos(t)*.18,.37,Math.sin(t)*.18,[.12,.18,.12],gold)}break;
-case 4:[-1,1].forEach(s=>{part(cn,s*.18,.27,0,[.2,.24,.2],col);part(cn,s*.18,.26,-.03,[.1,.14,.1],pink)});break;
-case 5:[-1,1].forEach(s=>part(cn,s*.13,.31,-.04,[.1,.22,.1],red));break;
-case 6:part(cy,0,.4,0,[.05,.25,.05],[.3,.3,.3]);part(sp,0,.55,0,.1,red,[.5,0,0]);break;
-case 7:[-1,1].forEach(s=>part(sp,s*.11,.05,-.33,[.2,.15,.08],B));part(bx0,0,.06,-.3,[.06,.03,.03],B);break;
-case 8:part(cy,0,.55,0,[.5,.03,.5],gold,[.6,.5,0]);break;
-case 9:[-1,1].forEach(s=>part(sp,s*.07,-.08,-.285,[.16,.05,.05],B));break;
-case 10:part(sp,0,.2,0,[.66,.34,.66],blue);part(sp,0,.4,0,.12,W);break}}
+accs(sk.a,part,col)}
 const bx0=geos[1];
-function saveSk(){try{localStorage.setItem('vi_sk',JSON.stringify(mySk))}catch(_){}send({t:'s',c:mySk.c,e:mySk.e,a:mySk.a})}
-function refEd(){[['gc','c'],['ge','e'],['ga','a']].forEach(([id,k])=>$(id).childNodes.forEach(b=>b.classList.toggle('on',+b.dataset.i===mySk[k])))}
-[['gc',ACOL,'c',1],['ge',EYE,'e'],['ga',ACC,'a']].forEach(([id,arr,key,sw])=>arr.forEach((n,i)=>{const b=document.createElement('button');b.dataset.i=i;if(sw){b.className='sw';b.style.background='#'+n.toString(16).padStart(6,'0')}else{b.className='ch';b.textContent=n}b.onclick=()=>{mySk[key]=i;saveSk();refEd()};$(id).appendChild(b)}));
+const PINK=rgb(0xff4f8b),GOLD=rgb(0xffd23d),RED=rgb(0xe33b3b),BLUE=rgb(0x3d8bff),STEEL=rgb(0x9ca3af),BRN=rgb(0x6b4423);
+// аксессуары: координаты в системе головы-аватара (радиус головы .3, лицо смотрит в -z); part() ставит деталь — и для головы, и для роблоксианца
+function accs(a,part,col){const sp=geos[0],bx=geos[1],cy=geos[2],cn=geos[3],B=black,W=white;
+switch(a){
+case 1:part(cy,0,.25,0,[.76,.04,.76],B);part(cy,0,.4,0,[.5,.3,.5],B);part(cy,0,.31,0,[.52,.06,.52],RED);break;
+case 2:part(cn,0,.45,0,[.5,.5,.5],rgb(0xa66bff));part(sp,0,.72,0,.12,PINK);break;
+case 3:part(cy,0,.27,0,[.56,.1,.56],GOLD);for(let i=0;i<5;i++){const t=i/5*6.2832;part(cn,Math.cos(t)*.18,.37,Math.sin(t)*.18,[.12,.18,.12],GOLD)}break;
+case 4:[-1,1].forEach(s=>{part(cn,s*.18,.27,0,[.2,.24,.2],col);part(cn,s*.18,.26,-.03,[.1,.14,.1],PINK)});break;
+case 5:[-1,1].forEach(s=>part(cn,s*.13,.31,-.04,[.1,.22,.1],RED));break;
+case 6:part(cy,0,.4,0,[.05,.25,.05],[.3,.3,.3]);part(sp,0,.55,0,.1,RED,[.5,0,0]);break;
+case 7:[-1,1].forEach(s=>part(sp,s*.11,.05,-.33,[.2,.15,.08],B));part(bx,0,.06,-.3,[.06,.03,.03],B);break;
+case 8:part(cy,0,.55,0,[.5,.03,.5],GOLD,[.6,.5,0]);break;
+case 9:[-1,1].forEach(s=>part(sp,s*.07,-.08,-.285,[.16,.05,.05],B));break;
+case 10:part(sp,0,.2,0,[.66,.34,.66],BLUE);part(sp,0,.4,0,.12,W);break;
+case 11:part(sp,-.1,.32,-.05,[.16,.1,.1],PINK);part(sp,.1,.32,-.05,[.16,.1,.1],PINK);part(sp,0,.32,-.05,.08,RED);break; // бантик
+case 12:part(sp,.11,.05,-.32,[.2,.2,.05],B);part(cy,0,.1,0,[.74,.03,.74],B);break; // повязка пирата
+case 13:part(sp,0,.2,0,[.64,.44,.64],STEEL);part(cn,0,.46,0,[.08,.14,.08],RED);break; // шлем
+case 14:part(sp,0,.2,0,[.62,.34,.62],RED);part(cy,0,.17,-.27,[.5,.03,.45],RED);break; // кепка
+case 15:[-1,1].forEach(s=>part(sp,s*.31,0,0,[.12,.22,.22],B));for(let i=0;i<=6;i++){const t=i/6*Math.PI;part(sp,Math.cos(t)*.31,Math.sin(t)*.31,0,.06,B)}break; // наушники
+case 16:part(sp,.2,.27,-.05,.09,GOLD);for(let i=0;i<6;i++){const t=i/6*6.2832;part(sp,.2+Math.cos(t)*.085,.27,-.05+Math.sin(t)*.085,.08,PINK)}break; // цветок
+case 17:part(cn,0,.38,-.1,[.1,.36,.1],rgb(0xfff2a8),[.35,.3,.05]);break; // рог единорога
+case 18:[-1,1].forEach(s=>{part(sp,s*.4,.12,.05,[.34,.08,.2],W);part(sp,s*.47,.2,.05,[.22,.06,.14],W)});break; // крылышки
+case 19:part(sp,0,-.2,-.12,[.36,.34,.3],BRN);break; // борода
+case 20:part(sp,0,.58,0,.14,GOLD,[.6,.5,0]);for(let i=0;i<5;i++){const t=i/5*6.2832;part(sp,Math.cos(t)*.15,.58+Math.sin(t)*.15,0,.07,GOLD,[.5,.4,0])}break} // звезда
+}
+
+function saveSk(){try{localStorage.setItem('vi_sk',JSON.stringify(mySk))}catch(_){}send({t:'s',c:mySk.c,e:mySk.e,a:mySk.a,m:mySk.m})}
+function refEd(){[['gc','c'],['ge','e'],['ga','a'],['gm','m']].forEach(([id,k])=>$(id).childNodes.forEach(b=>b.classList.toggle('on',+b.dataset.i===mySk[k])));$('emo').textContent=EMJ[mySk.m|0]}
+[['gc',ACOL,'c',1],['ge',EYE,'e'],['ga',ACC,'a'],['gm',EMO,'m']].forEach(([id,arr,key,sw])=>arr.forEach((n,i)=>{const b=document.createElement('button');b.dataset.i=i;if(sw){b.className='sw';b.style.background='#'+n.toString(16).padStart(6,'0')}else{b.className='ch';b.textContent=n}b.onclick=()=>{mySk[key]=i;saveSk();refEd()};$(id).appendChild(b)}));
 refEd();
-$('sk').onclick=()=>{const on=document.body.classList.toggle('edit');$('ed').style.display=on?'block':'none';$('sk').classList.toggle('on',on);if(on)$('menu').style.display='none'};
-$('edx').onclick=()=>{document.body.classList.remove('edit');$('ed').style.display='none';$('sk').classList.remove('on')};
+function closeSE(){document.body.classList.remove('edit');$('ed').style.display='none';$('sk').classList.remove('on')}
+function closeBE(){document.body.classList.remove('be','edit');$('be').style.display='none';$('bk').classList.remove('on')}
+$('sk').onclick=()=>{const on=!$('sk').classList.contains('on');setMode(null);closeBE();closeSE();if(on){document.body.classList.add('edit');$('ed').style.display='block';$('sk').classList.add('on');$('menu').style.display='none'}};
+$('edx').onclick=closeSE;$('bex').onclick=closeBE;
+$('bk').onclick=()=>{const on=!$('bk').classList.contains('on');setMode(null);closeSE();closeBE();if(on){document.body.classList.add('edit','be');$('be').style.display='block';$('bk').classList.add('on');$('menu').style.display='none'}};
+// ---- редактор блоков
+const SHN=['Шар','Куб','Цилиндр','Конус'],BS={sh:1,s:1,c:0};let noO=0,clrT=0;
+SHN.forEach((n,i)=>{const b=document.createElement('button');b.className='ch';b.textContent=n;b.dataset.i=i;b.onclick=()=>{BS.sh=i;refBE()};$('bs').appendChild(b)});
+cols.forEach((c,i)=>{const b=document.createElement('button');b.className='sw';b.dataset.i=i;b.style.background='#'+c.toString(16).padStart(6,'0');b.onclick=()=>{BS.c=i;refBE()};$('bc').appendChild(b)});
+function refBE(){$('bs').childNodes.forEach(b=>b.classList.toggle('on',+b.dataset.i===BS.sh));$('bc').childNodes.forEach(b=>b.classList.toggle('on',+b.dataset.i===BS.c));$('bsv').textContent=BS.s.toFixed(1)}
+$('bsz').oninput=e=>{BS.s=+e.target.value;refBE()};refBE();
+$('bput').onclick=()=>{const s=BS.s,p=new V3((Math.random()-.5)*.6,0,-(me.rb?2.6:1.6)-s*.6).applyYP(me.yaw,me.pitch).add(me.rb?cam:me.h);
+const o=mk(myId+(seq++),BS.sh,cols[BS.c],s,[p.x,Math.max(p.y,s*.5),p.z],myId);o.dirty=true;toast('Блок поставлен')};
+function clearMap(remote){const n=objs.size;me.hand.forEach(H=>{if(H.held&&H.held!=='P'){H.held=null;H.g=false}});me.sup=null;objs.clear();noO=performance.now()+300;updUI();
+if(!remote)send({t:'clr'});toast(remote?'Игрок очистил карту':n?'Карта очищена: убрано блоков — '+n:'На карте нет блоков')}
+$('bclr').onclick=()=>{const B=$('bclr');if(!clrT){B.textContent='Точно? Нажмите ещё раз';clrT=setTimeout(()=>{clrT=0;B.textContent='🧹 Очистить карту'},3000);return}
+clearTimeout(clrT);clrT=0;B.textContent='🧹 Очистить карту';clearMap(false)};
+$('emo').onclick=()=>{mySk.m=((mySk.m|0)+1)%EMO.length;saveSk();refEd();toast(mySk.m?EMO[mySk.m]:'Эмоция убрана')};
+// ---- режимы: Gizmo, сохранение и вставка построек
+let MODE=null,gzSel=null,cpSel=null,CLIP=null,PL=null,svT='';const SV={a:null,b:null},AX=[[1,0,0],[0,1,0],[0,0,1]],GZO=.45,SELEM=[.28,.22,0],GZV=[];
+const dAB=(o,q)=>Math.hypot(Math.max(Math.abs(q.x-o.p.x)-o.s*o.k[0]/2,0),Math.max(Math.abs(q.y-o.p.y)-o.s*o.k[1]/2,0),Math.max(Math.abs(q.z-o.p.z)-o.s*o.k[2]/2,0));
+function setMode(m){MODE=m;const c=document.body.classList;['m-gz','m-sv','m-pl','m-cp','mm'].forEach(x=>c.remove(x));
+if(m){c.add('mm','m-'+m);closeBE();closeSE();$('menu').style.display='none'}
+if(m!=='gz'){gzSel=null;gzd=null}if(m!=='cp')cpSel=null;if(m!=='sv'){SV.a=SV.b=null}if(m!=='pl')PL=null}
+// луч из камеры через точку экрана
+const rayDir=(x,y)=>{const f=1/Math.tan(35*Math.PI/180),d=new V3(((x/innerWidth)*2-1)*aspect/f,(1-(y/innerHeight)*2)/f,-1).applyYP(me.yaw,me.pitch);return d.multiplyScalar(1/Math.hypot(d.x,d.y,d.z))};
+function rayBox(o,d){const e=[o.s*o.k[0]/2,o.s*o.k[1]/2,o.s*o.k[2]/2],c=[o.p.x,o.p.y,o.p.z],q=[cam.x,cam.y,cam.z],v=[d.x,d.y,d.z];let t0=0,t1=1e9;
+for(let i=0;i<3;i++){if(Math.abs(v[i])<1e-9){if(q[i]<c[i]-e[i]||q[i]>c[i]+e[i])return -1}else{let a=(c[i]-e[i]-q[i])/v[i],b=(c[i]+e[i]-q[i])/v[i];if(a>b){const z=a;a=b;b=z}t0=Math.max(t0,a);t1=Math.min(t1,b);if(t0>t1)return -1}}return t0}
+function onTap(x,y){const d=rayDir(x,y);
+if(MODE==='cp'){let bt=1e9,bo=null;objs.forEach(o=>{const t=rayBox(o,d);if(t>=0&&t<bt){bt=t;bo=o}});cpSel=bo;cpUpd();if(!bo)toast('Блок не выбран');return}
+if(MODE==='gz'){let bt=1e9,bo=null;objs.forEach(o=>{const t=rayBox(o,d);if(t>=0&&t<bt){bt=t;bo=o}});gzSel=bo;gzUpd();if(!bo)toast('Блок не выбран');return}
+if(d.y>=-.01){toast('Тапните по земле');return}const t=-cam.y/d.y,g={x:cam.x+d.x*t,z:cam.z+d.z*t};
+if(MODE==='sv'){if(!SV.a||SV.b){SV.a=g;SV.b=null}else SV.b=g}else if(MODE==='pl'&&PL){PL.x=g.x;PL.z=g.z}}
+// ---- Gizmo
+const half=(o,a)=>o.s*o.k[a]/2,hpos=(o,a,sg)=>{const L=sg*(half(o,a)+GZO);return new V3(o.p.x+AX[a][0]*L,o.p.y+AX[a][1]*L,o.p.z+AX[a][2]*L)};
+function stretch(o,a,f){const cur=o.s*o.k[a],nd=clamp(cur*f,.15,24),r=nd/cur;if(Math.abs(r-1)<1e-9)return;o.k[a]*=r;o.own=myId;o.dirty=true;
+objs.forEach(c=>{if(c.par===o.id){c.k[a]=clamp(c.k[a]*r,.05,60);if(a===0)c.off.x*=r;else if(a===1)c.off.y*=r;else c.off.z*=r;c.own=myId;c.dirty=true}});
+o.p.y=Math.max(o.p.y,o.s*o.k[1]/2);gzUpd()}
+function gzUpd(){if(gzSel&&!objs.has(gzSel.id))gzSel=null;const o=gzSel;$('gzs').textContent=o?SHN[o.sh]+': тяните цветные кубики или жмите − и +':'Тапните по блоку, чтобы выбрать его';
+GZV.forEach((e,i)=>e.textContent=o?(o.s*o.k[i]).toFixed(2):'—')}
+function gzApply(axes,f){const o=gzSel;if(!o||!objs.has(o.id)){toast('Сначала тапните по блоку');return}axes.forEach(a=>stretch(o,a,f))}
+// ближайшая к лучу точка на оси объекта (параметр вдоль оси)
+function closestT(C,A,d){const w=[C.x-cam.x,C.y-cam.y,C.z-cam.z],b=A[0]*d.x+A[1]*d.y+A[2]*d.z,dd=A[0]*w[0]+A[1]*w[1]+A[2]*w[2],e=d.x*w[0]+d.y*w[1]+d.z*w[2],den=1-b*b;if(den<1e-3)return null;return(b*e-dd)/den}
+function gzStart(e){const o=gzSel;if(!o||!objs.has(o.id))return false;const d=rayDir(e.clientX,e.clientY),dist=cam.distanceTo(o.p),r=Math.max(.22,dist*.05);let best=null,bd=1e9;
+for(let a=0;a<3;a++)for(const sg of[-1,1]){const h=hpos(o,a,sg),vx=h.x-cam.x,vy=h.y-cam.y,vz=h.z-cam.z;if(vx*d.x+vy*d.y+vz*d.z<=0)continue;
+const q=Math.hypot(vy*d.z-vz*d.y,vz*d.x-vx*d.z,vx*d.y-vy*d.x);if(q<r&&q<bd){bd=q;best={a,sg}}}
+if(!best)return false;const t=closestT(o.p,AX[best.a],d);if(t===null)return false;gzd={id:e.pointerId,a:best.a,sg:best.sg,off:t-best.sg*(half(o,best.a)+GZO)};return true}
+function gzMove(e){const o=gzSel;if(!o||!objs.has(o.id)){gzd=null;return}const t=closestT(o.p,AX[gzd.a],rayDir(e.clientX,e.clientY));if(t===null)return;
+const nh=clamp(gzd.sg*(t-gzd.off)-GZO,.075,12);stretch(o,gzd.a,2*nh/(o.s*o.k[gzd.a]))}
+[['X','#ff5a5a',[0]],['Y','#2ee86b',[1]],['Z','#4b9bff',[2]],['XYZ','',[0,1,2]]].forEach(([n,c,ax])=>{const r=document.createElement('div');r.className='gr';
+const l=document.createElement('span');l.textContent=n;if(c)l.style.color=c;
+const mb=(t,f)=>{const b=document.createElement('button');b.className='b';b.textContent=t;let a=null,iv=null;const stop=()=>{clearTimeout(a);clearInterval(iv)};
+b.onpointerdown=()=>{gzApply(ax,f);a=setTimeout(()=>{iv=setInterval(()=>gzApply(ax,Math.sqrt(f)),50)},350)};b.onpointerup=b.onpointerleave=b.onpointercancel=stop;return b};
+const v=document.createElement('b');v.className='gv';if(ax.length===1)GZV[ax[0]]=v;else v.textContent='все оси';
+r.appendChild(l);r.appendChild(mb('−',1/1.1));r.appendChild(v);r.appendChild(mb('+',1.1));$('gzr').appendChild(r)});
+function drawGizmo(){const o=gzSel;if(!o||!objs.has(o.id))return;gl.disable(gl.DEPTH_TEST);const col=[rgb(0xff3b3b),rgb(0x2ee86b),rgb(0x3b8bff)],dist=cam.distanceTo(o.p),th=Math.max(.04,dist*.012),hs=Math.max(.16,dist*.035);
+for(let a=0;a<3;a++){const L=half(o,a)+GZO,z=[th,th,th];z[a]=2*L;draw(geos[1],o.p.x,o.p.y,o.p.z,z,col[a]);for(const sg of[-1,1]){const h=hpos(o,a,sg);draw(geos[1],h.x,h.y,h.z,hs,col[a],[.25,.25,.25])}}
+gl.enable(gl.DEPTH_TEST)}
+// ---- сохранение построек
+const selRect=()=>SV.a&&SV.b?{x0:Math.min(SV.a.x,SV.b.x),x1:Math.max(SV.a.x,SV.b.x),z0:Math.min(SV.a.z,SV.b.z),z1:Math.max(SV.a.z,SV.b.z)}:null;
+function selObjs(){const r=selRect(),a=[];if(!r)return a;objs.forEach(o=>{if(o.p.x>=r.x0&&o.p.x<=r.x1&&o.p.z>=r.z0&&o.p.z<=r.z1)a.push(o)});return a}
+function svUpd(){const n=selObjs().length,t=!SV.a?'Тапните по земле — первый угол области':!SV.b?'Тапните по земле — второй угол области':'Блоков в области: '+n+'. Новый тап по земле — выбрать заново';if(t!==svT){svT=t;$('svs').textContent=t}$('svgo').disabled=!(SV.b&&n)}
+function saveBuild(){const r=selRect(),L=selObjs();if(!L.length){toast('В области нет блоков');return}
+const cx=(r.x0+r.x1)/2,cz=(r.z0+r.z1)/2,idx=new Map();L.forEach((o,i)=>idx.set(o.id,i));
+const blocks=L.map(o=>({sh:o.sh,c:o.c,s:r3(o.s),k:o.k.map(r3),p:[r3(o.p.x-cx),r3(o.p.y),r3(o.p.z-cz)],f:o.f?1:0,a:o.par&&idx.has(o.par)?idx.get(o.par):-1,q:o.off.toArray().map(r3)})),dots=[];
+for(let i=0;i<dcount;i++){const d=D[i];if(!d)continue;
+if(d.o){if(idx.has(d.o))dots.push({c:d.c,o:idx.get(d.o),p:[r3(d.l.x),r3(d.l.y),r3(d.l.z)],s:r3(d.s0),k:d.k.map(r3)})}
+else if(d.l.x>=r.x0&&d.l.x<=r.x1&&d.l.z>=r.z0&&d.l.z<=r.z1)dots.push({c:d.c,o:-1,p:[r3(d.l.x-cx),r3(d.l.y),r3(d.l.z-cz)],s:1,k:[1,1,1]})}
+const data={game:'VIAER',v:1,w:r3(r.x1-r.x0),d:r3(r.z1-r.z0),blocks,dots};
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));a.download='viaer-build-'+Date.now()+'.json';document.body.appendChild(a);a.click();
+setTimeout(()=>{try{URL.revokeObjectURL(a.href)}catch(_){}a.remove()},1500);toast('Постройка сохранена в файл: блоков — '+blocks.length);setMode(null)}
+// ---- вставка построек
+function parseBuild(txt){let d;try{d=JSON.parse(txt)}catch(_){return null}if(!d||d.game!=='VIAER'||!Array.isArray(d.blocks)||!d.blocks.length)return null;
+const num=(v,a,b,def)=>{v=+v;return isFinite(v)?clamp(v,a,b):def},N=Math.min(d.blocks.length,800),v3=(v,a,b,def)=>[0,1,2].map(i=>num(v&&v[i],a,b,def));
+const blocks=d.blocks.slice(0,N).map((b,i)=>({sh:num(b.sh,0,3,1)|0,c:num(b.c,0,0xffffff,0xff6b4a)|0,s:num(b.s,.3,6,1),k:v3(b.k,.05,60,1),p:v3(b.p,-1000,1000,0),f:b.f?1:0,a:Number.isInteger(b.a)&&b.a>=0&&b.a<N&&b.a!==i?b.a:-1,q:v3(b.q,-1000,1000,0)}));
+const dots=(Array.isArray(d.dots)?d.dots:[]).slice(0,MAXD).filter(t=>t&&/^#[0-9a-fA-F]{6}$/.test(t.c)).map(t=>({c:t.c,o:Number.isInteger(t.o)&&t.o>=0&&t.o<N?t.o:-1,p:v3(t.p,-1000,1000,0),s:num(t.s,.01,100,1),k:v3(t.k,.05,60,1)}));
+return{blocks,dots,w:num(d.w,0,1000,4),d:num(d.d,0,1000,4)}}
+function startPlace(d){setMode('pl');PL={d,x:me.h.x-Math.sin(me.yaw)*5,z:me.h.z-Math.cos(me.yaw)*5};$('pls').textContent='Блоков: '+d.blocks.length+'. Тапните по земле, куда поставить, затем «Поставить здесь»'}
+function placeBuild(){if(!PL)return;const d=PL.d,px=PL.x,pz=PL.z,ids=[];
+d.blocks.forEach(b=>{const id=myId+(seq++);ids.push(id);const o=mk(id,b.sh,b.c,b.s,[px+b.p[0],Math.max(b.p[1],b.s*b.k[1]*.5),pz+b.p[2]],myId);o.k=b.k.slice();o.f=!!b.f;o.dirty=true});
+d.blocks.forEach((b,i)=>{if(b.a>=0){const o=objs.get(ids[i]);o.par=ids[b.a];o.off.set(b.q[0],b.q[1],b.q[2])}});
+const out=[];d.dots.forEach(t=>{const pid=t.o>=0?ids[t.o]:null,loc=pid?new V3(t.p[0],t.p[1],t.p[2]):new V3(px+t.p[0],t.p[1],pz+t.p[2]);addDot(t.c,pid,loc,t.s,t.k);out.push({c:t.c,o:pid,p:loc.toArray().map(r3),s:t.s,k:t.k})});
+for(let i=0;i<out.length;i+=150)send({t:'D',l:out.slice(i,i+150)});toast('Постройка поставлена. Можно тапнуть другое место или закрыть ✕')}
+
+// ---- копирование блоков (вместе с приклеенными, с растяжением и рисунком)
+function cpRoot(o){let r=o,n=0;while(r.par&&objs.has(r.par)&&n++<50)r=objs.get(r.par);return r}
+function cpGroup(o){const r=cpRoot(o),a=[];objs.forEach(c=>{if(cpRoot(c)===r)a.push(c)});return a}
+function cpUpd(){if(cpSel&&!objs.has(cpSel.id))cpSel=null;const n=cpSel?cpGroup(cpSel).length:0;$('cps').textContent=cpSel?'Выбрано блоков: '+n+' (с приклеенными). Жмите «Копировать»':'Тапните по блоку, чтобы выбрать его';$('cpgo').disabled=!cpSel}
+function copyBlocks(L){if(!L.length)return false;let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;
+L.forEach(o=>{const hx=o.s*o.k[0]/2,hz=o.s*o.k[2]/2;x0=Math.min(x0,o.p.x-hx);x1=Math.max(x1,o.p.x+hx);z0=Math.min(z0,o.p.z-hz);z1=Math.max(z1,o.p.z+hz)});
+const cx=(x0+x1)/2,cz=(z0+z1)/2,idx=new Map();L.forEach((o,i)=>idx.set(o.id,i));
+const blocks=L.map(o=>({sh:o.sh,c:o.c,s:o.s,k:o.k.slice(),p:[o.p.x-cx,o.p.y,o.p.z-cz],f:o.f?1:0,a:o.par&&idx.has(o.par)?idx.get(o.par):-1,q:o.off.toArray()})),dots=[];
+for(let i=0;i<dcount;i++){const d=D[i];if(d&&d.o&&idx.has(d.o))dots.push({c:d.c,o:idx.get(d.o),p:[d.l.x,d.l.y,d.l.z],s:d.s0,k:d.k.slice()})}
+CLIP={blocks,dots,w:x1-x0,d:z1-z0};return true}
+$('cpgo').onclick=()=>{if(!cpSel)return;copyBlocks(cpGroup(cpSel));startPlace(CLIP);toast('Скопировано. Тапните по земле и «Поставить здесь»')};
+$('cpx').onclick=()=>setMode(null);
+$('bcp').onclick=()=>{setMode('cp');cpUpd();toast('Тапните по блоку, чтобы выбрать')};
+$('bpaste').onclick=()=>{if(!CLIP){toast('Сначала скопируйте блок');return}startPlace(CLIP)};
+// ---- рисование режимов
+const post=(x,z,c)=>draw(geos[1],x,1.5,z,[.12,3,.12],c),outline=(cx,cz,w,d,c)=>{draw(geos[1],cx,.05,cz-d/2,[w+.12,.06,.12],c);draw(geos[1],cx,.05,cz+d/2,[w+.12,.06,.12],c);draw(geos[1],cx-w/2,.05,cz,[.12,.06,d],c);draw(geos[1],cx+w/2,.05,cz,[.12,.06,d],c)};
+function drawModes(){
+if(MODE==='sv'){svUpd();const r=selRect(),Y=rgb(0xffd23d);if(SV.a&&!SV.b)post(SV.a.x,SV.a.z,Y);if(r){outline((r.x0+r.x1)/2,(r.z0+r.z1)/2,r.x1-r.x0,r.z1-r.z0,Y);[[r.x0,r.z0],[r.x1,r.z0],[r.x0,r.z1],[r.x1,r.z1]].forEach(q=>post(q[0],q[1],Y))}}
+else if(MODE==='pl'&&PL){const em=[0,.2,.1];PL.d.blocks.forEach(b=>draw(geos[b.sh],PL.x+b.p[0],Math.max(b.p[1],b.s*b.k[1]*.5),PL.z+b.p[2],[b.s*b.k[0],b.s*b.k[1],b.s*b.k[2]],rgb(b.c),em));outline(PL.x,PL.z,PL.d.w,PL.d.d,rgb(0x2ee86b))}
+else if(MODE==='gz'){if(gzSel&&!objs.has(gzSel.id)){gzSel=null;gzUpd()}drawGizmo()}}
+$('bgz').onclick=()=>{setMode('gz');gzUpd();toast('Тапните по блоку, чтобы выбрать')};
+$('bsave').onclick=()=>{setMode('sv');svT='';toast('Отметьте два угла области на земле')};
+$('bload').onclick=()=>{$('fi').value='';$('fi').click()};
+$('fi').onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const d=parseBuild(String(r.result));if(!d){toast('Это не файл постройки VIAER');return}startPlace(d)};r.readAsText(f)};
+$('gzx').onclick=$('svx').onclick=$('plx').onclick=()=>setMode(null);
+$('svall').onclick=()=>{if(!objs.size){toast('На карте нет блоков');return}let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;objs.forEach(o=>{x0=Math.min(x0,o.p.x);x1=Math.max(x1,o.p.x);z0=Math.min(z0,o.p.z);z1=Math.max(z1,o.p.z)});SV.a={x:x0-.5,z:z0-.5};SV.b={x:x1+.5,z:z1+.5}};
+$('svgo').onclick=saveBuild;$('plgo').onclick=placeBuild;
+
 // ---- роблоксианец: маленький (с руку) человечек
 const RR=.1,RH=.4,RS=2.6; // радиус, рост, скорость
 const peerC=()=>new V3(peer.pos.x,peer.pos.y+.2,peer.pos.z);
 function drawRoblox(p,yaw,sk,st,k){
-const t=performance.now()/1000,w=Math.sin(t*11)*.8,col=rgb(ACOL[sk.c]||ACOL[0]),Y=rgb(0xf5cd30),L=rgb(0x4b974b),B=[.07,.07,.07],bx=geos[1],cy=geos[2];
-const put=(g,x,y,z,s,c,a)=>{const q=new V3(x*k,y*k,z*k).applyYP(yaw,0).add(p);draw(g,q.x,q.y,q.z,s.map(v=>v*k),c,null,yaw,a||0)};
+const t=performance.now()/1000,w=Math.sin(t*11)*.8,col=rgb(ACOL[sk.c]||ACOL[0]),Y=rgb(0xf5cd30),L=rgb(0x4b974b),B=[.07,.07,.07],bx=geos[1],cy=geos[2],sp=geos[0],m=sk.m|0;
+const P=(m===1&&st===0)?new V3(p.x,p.y+Math.abs(Math.sin(t*9))*.025*k,p.z):p; // радость: подпрыгивает
+const put=(g,x,y,z,s,c,a)=>{const q=new V3(x*k,y*k,z*k).applyYP(yaw,0).add(P);draw(g,q.x,q.y,q.z,s.map(v=>v*k),c,null,yaw,a||0)};
 const limb=(sx,hy,len,wd,c,a)=>put(bx,sx,hy-len/2*Math.cos(a),-len/2*Math.sin(a),[wd,len,wd],c,a);
 let la=0,ra=0,al=0,ar=0;
 if(st===1){la=w;ra=-w;al=-w*.9;ar=w*.9}
 else if(st===2){const s=Math.sin(t*9);la=s*.5;ra=-s*.5;al=2.9+s*.4;ar=2.9-s*.4}
 else if(st===3){la=.45;ra=-.45;al=ar=2.5}
+else if(m){const s=Math.sin(t*(m===3?22:m===1?9:3));
+if(m===1){al=2.6+s*.35;ar=2.6-s*.35}else if(m===2){al=ar=.12}else if(m===3){al=ar=1.2+s*.12}else if(m===4){al=ar=2.3}else{al=ar=1.35+s*.12}}
 limb(-.04,.16,.16,.075,L,la);limb(.04,.16,.16,.075,L,ra);
 put(bx,0,.24,0,[.16,.16,.08],col);
 limb(-.12,.31,.15,.075,Y,al);limb(.12,.31,.15,.075,Y,ar);
 put(cy,0,.36,0,[.12,.08,.12],Y);
-put(bx,-.02,.365,-.047,[.016,.02,.01],B);put(bx,.02,.365,-.047,[.016,.02,.01],B);put(bx,0,.34,-.047,[.04,.01,.01],B)}
+// лицо по эмоции
+const fz=-.047,E=(x,y,ww,hh,c)=>put(bx,x,y,fz,[ww,hh,.01],c||B),W=white,PK=rgb(0xff4f8b);
+if(m===1){E(-.02,.368,.02,.008);E(.02,.368,.02,.008);[-.03,-.015,0,.015,.03].forEach((x,i)=>E(x,[.35,.34,.335,.34,.35][i],.014,.01))}
+else if(m===2){E(-.02,.365,.016,.02);E(.02,.365,.016,.02);[-.03,-.015,0,.015,.03].forEach((x,i)=>E(x,[.335,.345,.35,.345,.335][i],.014,.01));put(sp,.025,.352-(t*.5%1)*.035,fz-.003,[.012,.016,.012],rgb(0x3d8bff))}
+else if(m===3){E(-.02,.36,.014,.014);E(.02,.36,.014,.014);E(-.034,.382,.014,.007);E(-.022,.377,.014,.007);E(-.01,.372,.012,.007);E(.034,.382,.014,.007);E(.022,.377,.014,.007);E(.01,.372,.012,.007);E(0,.337,.03,.008)}
+else if(m===4){[-.02,.02].forEach(x=>{put(sp,x,.368,fz-.003,[.03,.034,.014],W);put(sp,x,.368,fz-.011,[.014,.016,.008],B)});put(sp,0,.335,fz-.003,[.02,.026,.012],B)}
+else if(m===5){[-.02,.02].forEach(x=>put(sp,x,.366,fz-.003,[.024,.024,.012],PK));E(-.012,.345,.01,.008);E(0,.339,.016,.008);E(.012,.345,.01,.008);
+[0,1,2].forEach(i=>{const u=(t*.45+i/3)%1;put(sp,Math.sin(t*3+i*2)*.035,.42+u*.1,0,[.022,.022,.022],PK)})}
+else{E(-.02,.365,.016,.02);E(.02,.365,.016,.02);E(0,.34,.04,.01)}
+// аксессуары: те же, что у головы, уменьшенные под голову роблоксианца
+const hp=(g,x,y,z,s,c,em,fl)=>{const f=.17,q=new V3(x*f*k,(.36+y*f)*k,z*f*k).applyYP(yaw,0).add(P),S=Array.isArray(s)?s:[s,s,s];draw(g,q.x,q.y,q.z,S.map(v=>v*f*k),c,em,yaw,fl?Math.PI:0)};
+accs(sk.a|0,hp,Y)}
 // столкновения: возвращают вектор, на который надо вытолкнуть роблоксианца
 function hitSph(p,c,r){const y1=p.y+RR,y2=p.y+RH-RR,cy=clamp(c.y,y1,y2),dx=p.x-c.x,dy=cy-c.y,dz=p.z-c.z,d=Math.hypot(dx,dy,dz),R=r+RR;if(d>=R)return null;if(d<1e-5)return{x:0,y:R,z:0};const k=(R-d)/d;return{x:dx*k,y:dy*k,z:dz*k}}
-function hitSolid(p,o,py){const s=o.s,h=s/2,top=o.p.y+h,bot=o.p.y-h;if(p.y>=top||p.y+RH<=bot)return null;
-if(o.sh===0)return hitSph(p,o.p,h);
-const dx=p.x-o.p.x,dz=p.z-o.p.z;let ph,hx=0,hz=0;
-if(o.sh===1){const ax=h+RR-Math.abs(dx),az=h+RR-Math.abs(dz);if(ax<=0||az<=0)return null;if(ax<az){ph=ax;hx=Math.sign(dx)||1}else{ph=az;hz=Math.sign(dz)||1}}
-else{const dh=Math.hypot(dx,dz),rc=o.sh===2?.4*s:.5*s*(1-clamp((p.y+.05-bot)/s,0,1));ph=rc+RR-dh;if(ph<=0)return null;if(dh<1e-4)hx=1;else{hx=dx/dh;hz=dz/dh}}
+function hitSolid(p,o,py){const s=o.s,kx=o.k[0],ky=o.k[1],kz=o.k[2],h=s*ky/2,top=o.p.y+h,bot=o.p.y-h;if(p.y>=top||p.y+RH<=bot)return null;
+if(o.sh===0&&kx===ky&&ky===kz)return hitSph(p,o.p,h);
+const dx=p.x-o.p.x,dz=p.z-o.p.z,cf=o.sh===2?.4:.5,wx=cf*s*kx,wz=cf*s*kz;let ph,hx=0,hz=0;
+if(o.sh<2||wx!==wz){const ax=wx+RR-Math.abs(dx),az=wz+RR-Math.abs(dz);if(ax<=0||az<=0)return null;if(ax<az){ph=ax;hx=Math.sign(dx)||1}else{ph=az;hz=Math.sign(dz)||1}}
+else{const dh=Math.hypot(dx,dz),rc=o.sh===2?wx:wx*(1-clamp((p.y+.05-bot)/(s*ky),0,1));ph=rc+RR-dh;if(ph<=0)return null;if(dh<1e-4)hx=1;else{hx=dx/dh;hz=dz/dh}}
 const pu=top-p.y,pd=p.y+RH-bot;
 if(py>=top-.02||(pu<=ph&&pu<=pd))return{x:0,y:pu,z:0};
 if(pd<ph&&pd<pu)return{x:0,y:-pd,z:0};
@@ -287,9 +447,10 @@ return{x:hx*ph,y:0,z:hz*ph}}
 function rbCols(){const a=[];objs.forEach(o=>a.push({k:o.id,c:o.p,f:(q,py)=>hitSolid(q,o,py)}));
 if(peer){if(peer.rb){const c=peerC();a.push({k:'pr',c,f:q=>hitSph(q,c,.17)})}
 else{a.push({k:'ph',c:peer.pos,f:q=>hitSph(q,peer.pos,.33)});peer.hp.forEach((h,i)=>a.push({k:'p'+i,c:h,f:q=>hitSph(q,h,.17)}))}}return a}
-function ptIn(o,q){const h=o.s/2,dy=q.y-o.p.y;if(Math.abs(dy)>=h)return false;const dx=q.x-o.p.x,dz=q.z-o.p.z;
-if(o.sh===1)return Math.abs(dx)<h&&Math.abs(dz)<h;if(o.sh===0)return dx*dx+dy*dy+dz*dz<h*h;
-const r=o.sh===2?.4*o.s:.5*o.s*(.5-dy/o.s);return dx*dx+dz*dz<r*r}
+function ptIn(o,q){const kx=o.k[0],ky=o.k[1],kz=o.k[2],h=o.s*ky/2,dy=q.y-o.p.y;if(Math.abs(dy)>=h)return false;const dx=q.x-o.p.x,dz=q.z-o.p.z;
+if(o.sh===1)return Math.abs(dx)<o.s*kx/2&&Math.abs(dz)<o.s*kz/2;
+if(o.sh===0){const a=o.s*kx/2,c=o.s*kz/2;return(dx*dx)/(a*a)+(dy*dy)/(h*h)+(dz*dz)/(c*c)<1}
+const f=o.sh===2?.4:.5*(.5-dy/(o.s*ky)),rx=f*o.s*kx,rz=f*o.s*kz;if(rx<=0||rz<=0)return false;return(dx*dx)/(rx*rx)+(dz*dz)/(rz*rz)<1}
 const inSolid=q=>{for(const o of objs.values())if(ptIn(o,q))return true;return false};
 function rbUpdate(dt,now){const p=me.h,sy=Math.sin(me.yaw),cy=Math.cos(me.yaw),dx=sy*jv.y+cy*jv.x,dz=cy*jv.y-sy*jv.x,mv2=Math.hypot(dx,dz)>.12,dir=mv2?new V3(dx,0,dz):new V3();
 if(mv2)me.face=lerpA(me.face,Math.atan2(-dx,-dz),Math.min(1,dt*14));
@@ -324,10 +485,11 @@ const mv=new V3(),tmp=new V3(),fa=rgb(0xeadfc4),fb=rgb(0xd3c4a1);let last=perfor
 const lerpA=(a,b,k)=>a+((b-a+Math.PI*3)%(Math.PI*2)-Math.PI)*k;
 function render(){gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(PM.p);camU(PM,cam.x,cam.y,cam.z,me.yaw,me.pitch);
 draw(gFA,0,0,0,1,fa);draw(gFB,0,0,0,1,fb);
-objs.forEach(o=>draw(geos[o.sh],o.p.x,o.p.y,o.p.z,o.s,rgb(o.c),o.f?[.1,.33,.4]:ZERO));
+const selS=MODE==='sv'&&SV.b?new Set(selObjs()):MODE==='cp'&&cpSel&&objs.has(cpSel.id)?new Set(cpGroup(cpSel)):null;objs.forEach(o=>draw(geos[o.sh],o.p.x,o.p.y,o.p.z,[o.s*o.k[0],o.s*o.k[1],o.s*o.k[2]],rgb(o.c),selS&&selS.has(o)?SELEM:ZERO));
 if(me.rb)drawRoblox(me.h,me.face,mySk,me.st,1);else{const hc=rgb(ACOL[mySk.c]||ACOL[0]);me.hand.forEach(H=>draw(gS,H.w.x,H.w.y,H.w.z,(H.g?.16:.22),hc))}
 if(peer&&peer.rb)drawRoblox(peer.pos,peer.yaw,peer.sk,peer.st,1);else if(peer){drawAvatar(peer.pos,peer.yaw,peer.pitch,peer.sk,1);const pc2=rgb(ACOL[peer.sk.c]||ACOL[0]);[0,1].forEach(i=>{const h=peer.hp[i];draw(gS,h.x,h.y,h.z,peer.t.g[i]?.2:.26,pc2)})}
-if(document.body.classList.contains('edit')){const d=2.4,ox=-(($('ed').offsetWidth+8)/innerWidth)*d*aspect/1.428,t=performance.now()/900;{const pv=new V3(ox,me.rb?-.55:-.05,-d).applyYP(me.yaw,me.pitch).add(cam),ry=me.yaw+Math.PI+Math.sin(t)*.6;if(me.rb)drawRoblox(pv,ry,mySk,0,2.6);else drawAvatar(pv,ry,0,mySk,1.8)}}
+if(document.body.classList.contains('edit')){const be=document.body.classList.contains('be'),d=2.4,ox=-(($(be?'be':'ed').offsetWidth+8)/innerWidth)*d*aspect/1.428,t=performance.now()/900;{const pv=new V3(ox,be||!me.rb?-.05:-.55,-d).applyYP(me.yaw,me.pitch).add(cam),ry=me.yaw+Math.PI+Math.sin(t)*.6;if(be)draw(geos[BS.sh],pv.x,pv.y,pv.z,.12+BS.s*.17,rgb(cols[BS.c]),ZERO,t*1.3,.4);else if(me.rb)drawRoblox(pv,ry,mySk,0,2.6);else drawAvatar(pv,ry,0,mySk,1.8)}}
+drawModes();
 if(dcount){gl.useProgram(PP.p);camU(PP,cam.x,cam.y,cam.z,me.yaw,me.pitch);
 gl.bindBuffer(gl.ARRAY_BUFFER,pbuf);gl.bufferSubData(gl.ARRAY_BUFFER,0,Dp.subarray(0,dcount*3));gl.vertexAttribPointer(0,3,gl.FLOAT,false,0,0);
 gl.bindBuffer(gl.ARRAY_BUFFER,cbuf);gl.vertexAttribPointer(1,3,gl.FLOAT,false,0,0);gl.drawArrays(gl.POINTS,0,dcount)}}
@@ -337,18 +499,18 @@ if(me.pull&&now-me.pull.t<300)me.h.lerp(me.pull.p,.3);
 me.hand.forEach(H=>{H.pw.copy(H.w);H.w.set(H.ox,H.oy,-me.arm).applyYP(me.yaw,me.pitch).add(me.h);if(H.w.y<.08)H.w.y=.08;tmp.subVectors(H.w,H.pw).divideScalar(dt);H.vel.lerp(tmp,.3);
 if(H.held==='P'){if(!peer)release(H);else H.pt=H.w.clone().add(H.off)}
 else if(H.held){const o=objs.get(H.held);if(o){o.p.copy(H.w).add(H.off);o.v.set(0,0,0)}}
-if(me.pen&&H.down&&!H.g&&H.w.distanceTo(H.last)>.05){H.last.copy(H.w);let b=null,bd=1e9;objs.forEach(o=>{const d=o.p.distanceTo(H.w)-o.s*.5;if(d<.25&&d<bd){bd=d;b=o}});
-const loc=b?H.w.clone().sub(b.p):H.w.clone(),pid=b?b.id:null,s0=b?b.s:1;addDot(pal[me.ci],pid,loc,s0);send({t:'d',c:pal[me.ci],o:pid,p:[r3(loc.x),r3(loc.y),r3(loc.z)],s:s0})}});
+if(me.pen&&H.down&&!H.g&&H.w.distanceTo(H.last)>.05){H.last.copy(H.w);let b=null,bd=1e9;objs.forEach(o=>{const d=dAB(o,H.w);if(d<.25&&d<bd){bd=d;b=o}});
+const loc=b?H.w.clone().sub(b.p):H.w.clone(),pid=b?b.id:null,s0=b?b.s:1;const k0=b?b.k.slice():null;addDot(pal[me.ci],pid,loc,s0,k0);send({t:'d',c:pal[me.ci],o:pid,p:[r3(loc.x),r3(loc.y),r3(loc.z)],s:s0,k:k0})}});
 for(let k=0;k<2;k++)objs.forEach(o=>{if(o.par){const q=objs.get(o.par);if(q)o.p.copy(q.p).add(o.off);else o.par=null}});
 objs.forEach(o=>{if(o.held||o.par)return;if(o.own!==myId){o.p.lerp(o.tp,.35);return}if(o.f)return;
-o.v.y-=14*dt;o.p.addScaledVector(o.v,dt);const e=o.s*.5;if(o.p.y<e){o.p.y=e;if(o.v.y<0)o.v.y*=-.3;if(Math.abs(o.v.y)<.6)o.v.y=0;o.v.x*=.92;o.v.z*=.92}else o.v.multiplyScalar(1-.2*dt)});
+o.v.y-=14*dt;o.p.addScaledVector(o.v,dt);const e=o.s*o.k[1]*.5;if(o.p.y<e){o.p.y=e;if(o.v.y<0)o.v.y*=-.3;if(Math.abs(o.v.y)<.6)o.v.y=0;o.v.x*=.92;o.v.z*=.92}else o.v.multiplyScalar(1-.2*dt)});
 for(let i=0;i<dcount;i++)if(D[i]&&D[i].o)setDot(i);
 if(peer){const t=peer.t;peer.rb=t.r>0;peer.st=Math.max(0,t.r-1);peer.pos.lerp(t.h,.4);peer.yaw=lerpA(peer.yaw,t.y,.4);peer.pitch=t.pi;peer.hp[0].lerp(t.l[0],.4);peer.hp[1].lerp(t.l[1],.4)}
 if(me.rb)rbUpdate(dt,now);else cam.copy(me.h);
 acc+=dt;acc2+=dt;
 if(acc>.05&&dc&&dc.readyState==='open'){acc=0;send({t:'p',h:me.h.toArray().map(r3),y:r3(me.rb?me.face:me.yaw),pi:r3(me.pitch),r:me.rb?1+me.st:0,l:me.hand.map(H=>H.w.toArray().map(r3)),g:me.hand.map(H=>H.g?1:0)});
 me.hand.forEach(H=>{if(H.held==='P'&&H.pt)send({t:'pull',p:H.pt.toArray().map(r3)})})}
-if(acc2>.1){acc2=0;if(dc&&dc.readyState==='open'){const l=[];objs.forEach(o=>{if(o.own!==myId)return;if(o.dirty||o.p.distanceToSquared(o.lp)>1e-6){o.dirty=false;o.lp.copy(o.p);l.push({i:o.id,sh:o.sh,c:o.c,s:r3(o.s),p:o.p.toArray().map(r3),f:o.f,a:o.par,q:o.off.toArray().map(r3),w:o.own})}});if(l.length)send({t:'o',l})}}
+if(acc2>.1){acc2=0;if(dc&&dc.readyState==='open'){const l=[];objs.forEach(o=>{if(o.own!==myId)return;if(o.dirty||o.p.distanceToSquared(o.lp)>1e-6){o.dirty=false;o.lp.copy(o.p);l.push({i:o.id,sh:o.sh,c:o.c,s:r3(o.s),k:o.k.map(r3),p:o.p.toArray().map(r3),f:o.f,a:o.par,q:o.off.toArray().map(r3),w:o.own})}});if(l.length)send({t:'o',l})}}
 me.hand.forEach((H,i)=>{if(!H.cm)return;const f=1.428,x=(H.ox*f/aspect/me.arm+1)/2*innerWidth+(i?58:-58),y=(1-H.oy*f/me.arm)/2*innerHeight+66;$('c'+i).style.transform='translate('+(clamp(x,40,innerWidth-40)-36)+'px,'+(clamp(y,70,innerHeight-40)-36)+'px)'});
 render()}
 updUI();requestAnimationFrame(frame);
