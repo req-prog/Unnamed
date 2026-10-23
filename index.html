@@ -29,6 +29,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 #be input[type=range]{width:100%;margin:2px 0;accent-color:var(--ac)}
 #emo{display:none}body.rb #emo{display:inline-block}
 .fl{position:fixed;right:calc(8px + env(safe-area-inset-right,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(56vw,236px);display:none;background:var(--ui);border-radius:18px;padding:10px;box-sizing:border-box;box-shadow:0 3px 0 var(--ln);max-height:calc(100% - 80px);overflow:auto;touch-action:pan-y}
+.rin{flex:1;min-width:0;width:0;height:40px;box-sizing:border-box;border:0;border-radius:10px;text-align:center;font:inherit;font-size:15px;background:transparent;color:var(--tx);box-shadow:inset 0 0 0 2px var(--ln);touch-action:auto;user-select:text;-webkit-user-select:text}
 .fl .eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .fl .el{font-size:13px;opacity:.85;margin:6px 0}
 .fl .b{width:100%;margin-top:6px;font-size:15px}.fl .eh .b,.fl .gr .b{width:auto;margin:0}
@@ -360,7 +361,7 @@ function stretch(o,a,f){const cur=o.s*o.k[a],nd=Math.max(cur*f,.02),r=nd/cur;if(
 objs.forEach(c=>{if(c.par===o.id){c.k[a]=Math.max(c.k[a]*r,.01);if(a===0)c.off.x*=r;else if(a===1)c.off.y*=r;else c.off.z*=r;c.own=myId;c.dirty=true}});
 o.p.y=Math.max(o.p.y,o.s*o.k[1]/2);gzUpd()}
 function gzUpd(){if(gzSel&&!objs.has(gzSel.id))gzSel=null;const o=gzSel;$('gzs').textContent=o?SHN[o.sh]+': тяните цветные кубики или жмите − и +':'Тапните по блоку, чтобы выбрать его';
-GZV.forEach((e,i)=>e.textContent=o?(o.s*o.k[i]).toFixed(2):'—')}
+GZV.forEach((e,i)=>e.textContent=o?(o.s*o.k[i]).toFixed(2):'—');rotUpd()}
 function gzApply(axes,f){const o=gzSel;if(!o||!objs.has(o.id)){toast('Сначала тапните по блоку');return}axes.forEach(a=>stretch(o,a,f))}
 // ближайшая к лучу точка на оси объекта (параметр вдоль оси)
 function closestT(C,A,d){const w=[C.x-cam.x,C.y-cam.y,C.z-cam.z],b=A[0]*d.x+A[1]*d.y+A[2]*d.z,dd=A[0]*w[0]+A[1]*w[1]+A[2]*w[2],e=d.x*w[0]+d.y*w[1]+d.z*w[2],den=1-b*b;if(den<1e-3)return null;return(b*e-dd)/den}
@@ -376,6 +377,23 @@ const mb=(t,f)=>{const b=document.createElement('button');b.className='b';b.text
 b.onpointerdown=()=>{gzApply(ax,f);a=setTimeout(()=>{iv=setInterval(()=>gzApply(ax,Math.sqrt(f)),50)},350)};b.onpointerup=b.onpointerleave=b.onpointercancel=stop;return b};
 const v=document.createElement('b');v.className='gv';if(ax.length===1)GZV[ax[0]]=v;else v.textContent='все оси';
 r.appendChild(l);r.appendChild(mb('−',1/1.1));r.appendChild(v);r.appendChild(mb('+',1.1));$('gzr').appendChild(r)});
+// ---- поворот блока стрелочками и цифрами (в Gizmo)
+let RSTEP=15;const RIN=[],ROTE=[1,0,0,0,1,0,0,0,1],nrm=v=>((v+180)%360+360)%360-180;
+const rotRoot=()=>gzSel&&objs.has(gzSel.id)?cpRoot(gzSel):null;
+function rotUpd(){const o=rotRoot();RIN.forEach((e,i)=>{if(document.activeElement!==e)e.value=o?+(o.ra?o.ra[i]:0).toFixed(1):''});document.querySelectorAll('#rotst .ch').forEach(b=>b.classList.toggle('on',+b.dataset.v===RSTEP))}
+function rotAx(a,deg){const o=rotRoot();if(!o){toast('Сначала тапните по блоку');return}if(!deg)return;const A=AX[a];
+o.R=mmul(rodr(A[0],A[1],A[2],deg*Math.PI/180),o.R||ROTE);o.ra=o.ra||[0,0,0];o.ra[a]=nrm(o.ra[a]+deg);
+o.p.y=Math.max(o.p.y,hY(o));objs.forEach(c=>{if(cpRoot(c)===o){c.own=myId;c.dirty=true}});rotUpd()}
+function rotReset(){const o=rotRoot();if(!o){toast('Сначала тапните по блоку');return}o.R=null;o.ra=[0,0,0];o.p.y=Math.max(o.p.y,hY(o));objs.forEach(c=>{if(cpRoot(c)===o){c.own=myId;c.dirty=true}});rotUpd()}
+(()=>{const P=$('gzp'),h=document.createElement('div');h.className='el';h.textContent='Поворот (градусы)';P.appendChild(h);
+const st=document.createElement('div');st.className='eg';st.id='rotst';[5,15,45,90].forEach(v=>{const b=document.createElement('button');b.className='ch';b.dataset.v=v;b.textContent='шаг '+v+'°';b.onclick=()=>{RSTEP=v;rotUpd()};st.appendChild(b)});P.appendChild(st);
+[['X','#ff5a5a'],['Y','#2ee86b'],['Z','#4b9bff']].forEach(([n,c],a)=>{const r=document.createElement('div');r.className='gr';const l=document.createElement('span');l.textContent=n;l.style.color=c;
+const mb=(t,sg)=>{const b=document.createElement('button');b.className='b';b.textContent=t;let tm=null,iv=null;const stop=()=>{clearTimeout(tm);clearInterval(iv)};
+b.onpointerdown=()=>{rotAx(a,sg*RSTEP);tm=setTimeout(()=>{iv=setInterval(()=>rotAx(a,sg*RSTEP),90)},400)};b.onpointerup=b.onpointerleave=b.onpointercancel=stop;return b};
+const inp=document.createElement('input');inp.type='number';inp.step='any';inp.inputMode='decimal';inp.className='rin';RIN[a]=inp;
+inp.onchange=()=>{const o=rotRoot();if(!o){inp.value='';return}const v=parseFloat(inp.value);if(!isFinite(v)){rotUpd();return}rotAx(a,nrm(v-(o.ra?o.ra[a]:0)));inp.blur();rotUpd()};
+r.appendChild(l);r.appendChild(mb('◀',-1));r.appendChild(inp);r.appendChild(mb('▶',1));P.appendChild(r)});
+const rs=document.createElement('button');rs.className='b';rs.textContent='↺ Сбросить поворот';rs.onclick=rotReset;P.appendChild(rs);rotUpd()})();
 function drawGizmo(){const o=gzSel;if(!o||!objs.has(o.id))return;gl.disable(gl.DEPTH_TEST);const col=[rgb(0xff3b3b),rgb(0x2ee86b),rgb(0x3b8bff)],dist=cam.distanceTo(o.p),th=Math.max(.04,dist*.012),hs=Math.max(.16,dist*.035);
 for(let a=0;a<3;a++){const L=half(o,a)+GZO,z=[th,th,th];z[a]=2*L;draw(geos[1],o.p.x,o.p.y,o.p.z,z,col[a]);for(const sg of[-1,1]){const h=hpos(o,a,sg);draw(geos[1],h.x,h.y,h.z,hs,col[a],[.25,.25,.25])}}
 gl.enable(gl.DEPTH_TEST)}
@@ -385,7 +403,7 @@ function selObjs(){const r=selRect(),a=[];if(!r)return a;objs.forEach(o=>{if(o.p
 function svUpd(){const n=selObjs().length,t=!SV.a?'Тапните по земле — первый угол области':!SV.b?'Тапните по земле — второй угол области':'Блоков в области: '+n+'. Новый тап по земле — выбрать заново';if(t!==svT){svT=t;$('svs').textContent=t}$('svgo').disabled=!(SV.b&&n)}
 function saveBuild(){const r=selRect(),L=selObjs();if(!L.length){toast('В области нет блоков');return}
 const cx=(r.x0+r.x1)/2,cz=(r.z0+r.z1)/2,idx=new Map();L.forEach((o,i)=>idx.set(o.id,i));
-const blocks=L.map(o=>({sh:o.sh,c:o.c,s:r3(o.s),k:o.k.map(r3),p:[r3(o.p.x-cx),r3(o.p.y),r3(o.p.z-cz)],f:o.f?1:0,m:o.m|0,l:o.on|0,a:o.par&&idx.has(o.par)?idx.get(o.par):-1,q:o.off.toArray().map(r3)})),dots=[];
+const blocks=L.map(o=>({sh:o.sh,c:o.c,s:r3(o.s),k:o.k.map(r3),p:[r3(o.p.x-cx),r3(o.p.y),r3(o.p.z-cz)],f:o.f?1:0,m:o.m|0,l:o.on|0,a:o.par&&idx.has(o.par)?idx.get(o.par):-1,q:o.off.toArray().map(r3),r:o.R?o.R.map(r3):null})),dots=[];
 for(let i=0;i<dcount;i++){const d=D[i];if(!d)continue;
 if(d.o){if(idx.has(d.o))dots.push({c:d.c,o:idx.get(d.o),p:[r3(d.l.x),r3(d.l.y),r3(d.l.z)],s:r3(d.s0),k:d.k.map(r3)})}
 else if(d.l.x>=r.x0&&d.l.x<=r.x1&&d.l.z>=r.z0&&d.l.z<=r.z1)dots.push({c:d.c,o:-1,p:[r3(d.l.x-cx),r3(d.l.y),r3(d.l.z-cz)],s:1,k:[1,1,1]})}
@@ -395,12 +413,12 @@ setTimeout(()=>{try{URL.revokeObjectURL(a.href)}catch(_){}a.remove()},1500);toas
 // ---- вставка построек
 function parseBuild(txt){let d;try{d=JSON.parse(txt)}catch(_){return null}if(!d||d.game!=='VIAER'||!Array.isArray(d.blocks)||!d.blocks.length)return null;
 const num=(v,a,b,def)=>{v=+v;return isFinite(v)?clamp(v,a,b):def},N=Math.min(d.blocks.length,800),v3=(v,a,b,def)=>[0,1,2].map(i=>num(v&&v[i],a,b,def));
-const blocks=d.blocks.slice(0,N).map((b,i)=>({sh:num(b.sh,0,3,1)|0,c:num(b.c,0,0xffffff,0xff6b4a)|0,s:num(b.s,.3,1e6,1),k:v3(b.k,.01,1e6,1),p:v3(b.p,-1e6,1e6,0),f:b.f?1:0,m:num(b.m,0,9,0)|0,l:b.l?1:0,a:Number.isInteger(b.a)&&b.a>=0&&b.a<N&&b.a!==i?b.a:-1,q:v3(b.q,-1e6,1e6,0)}));
+const blocks=d.blocks.slice(0,N).map((b,i)=>({sh:num(b.sh,0,3,1)|0,c:num(b.c,0,0xffffff,0xff6b4a)|0,s:num(b.s,.3,1e6,1),k:v3(b.k,.01,1e6,1),p:v3(b.p,-1e6,1e6,0),f:b.f?1:0,m:num(b.m,0,9,0)|0,l:b.l?1:0,a:Number.isInteger(b.a)&&b.a>=0&&b.a<N&&b.a!==i?b.a:-1,q:v3(b.q,-1e6,1e6,0),r:Array.isArray(b.r)&&b.r.length===9&&b.r.every(x=>isFinite(+x))?b.r.map(Number):null}));
 const dots=(Array.isArray(d.dots)?d.dots:[]).slice(0,MAXD).filter(t=>t&&/^#[0-9a-fA-F]{6}$/.test(t.c)).map(t=>({c:t.c,o:Number.isInteger(t.o)&&t.o>=0&&t.o<N?t.o:-1,p:v3(t.p,-1000,1000,0),s:num(t.s,.01,100,1),k:v3(t.k,.01,1e6,1)}));
 return{blocks,dots,w:num(d.w,0,1000,4),d:num(d.d,0,1000,4)}}
 function startPlace(d){setMode('pl');PL={d,x:me.h.x-Math.sin(me.yaw)*5,z:me.h.z-Math.cos(me.yaw)*5};$('pls').textContent='Блоков: '+d.blocks.length+'. Тапните по земле, куда поставить, затем «Поставить здесь»'}
 function placeBuild(){if(!PL)return;const d=PL.d,px=PL.x,pz=PL.z,ids=[];
-d.blocks.forEach(b=>{const id=myId+(seq++);ids.push(id);const o=mk(id,b.sh,b.c,b.s,[px+b.p[0],Math.max(b.p[1],b.s*b.k[1]*.5),pz+b.p[2]],myId);o.k=b.k.slice();o.f=!!b.f;o.m=b.m|0;o.on=b.l|0;o.dirty=true});
+d.blocks.forEach(b=>{const id=myId+(seq++);ids.push(id);const o=mk(id,b.sh,b.c,b.s,[px+b.p[0],Math.max(b.p[1],b.s*b.k[1]*.5),pz+b.p[2]],myId);o.k=b.k.slice();o.f=!!b.f;o.m=b.m|0;o.on=b.l|0;if(b.r)o.R=b.r.slice();o.dirty=true});
 d.blocks.forEach((b,i)=>{if(b.a>=0){const o=objs.get(ids[i]);o.par=ids[b.a];o.off.set(b.q[0],b.q[1],b.q[2])}});
 const out=[];d.dots.forEach(t=>{const pid=t.o>=0?ids[t.o]:null,loc=pid?new V3(t.p[0],t.p[1],t.p[2]):new V3(px+t.p[0],t.p[1],pz+t.p[2]);addDot(t.c,pid,loc,t.s,t.k);out.push({c:t.c,o:pid,p:loc.toArray().map(r3),s:t.s,k:t.k})});
 for(let i=0;i<out.length;i+=150)send({t:'D',l:out.slice(i,i+150)});toast('Постройка поставлена. Можно тапнуть другое место или закрыть ✕')}
@@ -412,7 +430,7 @@ function cpUpd(){if(cpSel&&!objs.has(cpSel.id))cpSel=null;const n=cpSel?cpGroup(
 function copyBlocks(L){if(!L.length)return false;let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;
 L.forEach(o=>{const hx=o.s*o.k[0]/2,hz=o.s*o.k[2]/2;x0=Math.min(x0,o.p.x-hx);x1=Math.max(x1,o.p.x+hx);z0=Math.min(z0,o.p.z-hz);z1=Math.max(z1,o.p.z+hz)});
 const cx=(x0+x1)/2,cz=(z0+z1)/2,idx=new Map();L.forEach((o,i)=>idx.set(o.id,i));
-const blocks=L.map(o=>({sh:o.sh,c:o.c,s:o.s,k:o.k.slice(),p:[o.p.x-cx,o.p.y,o.p.z-cz],f:o.f?1:0,m:o.m|0,l:o.on|0,a:o.par&&idx.has(o.par)?idx.get(o.par):-1,q:o.off.toArray()})),dots=[];
+const blocks=L.map(o=>({sh:o.sh,c:o.c,s:o.s,k:o.k.slice(),p:[o.p.x-cx,o.p.y,o.p.z-cz],f:o.f?1:0,m:o.m|0,l:o.on|0,a:o.par&&idx.has(o.par)?idx.get(o.par):-1,q:o.off.toArray(),r:o.R?o.R.slice():null})),dots=[];
 for(let i=0;i<dcount;i++){const d=D[i];if(d&&d.o&&idx.has(d.o))dots.push({c:d.c,o:idx.get(d.o),p:[d.l.x,d.l.y,d.l.z],s:d.s0,k:d.k.slice()})}
 CLIP={blocks,dots,w:x1-x0,d:z1-z0};return true}
 $('cpgo').onclick=()=>{if(!cpSel)return;copyBlocks(cpGroup(cpSel));startPlace(CLIP);toast('Скопировано. Тапните по земле и «Поставить здесь»')};
